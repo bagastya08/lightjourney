@@ -7,7 +7,7 @@ interface Props {
   description?: string;
 }
 
-const { title = 'Bagastya — Photographer & Videographer', description = 'Freelance photographer & videographer. Portrait, wedding, event, and product photography plus videography.' } = Astro.props;
+const { title = 'LightJourney — Photographer & Videographer', description = 'Freelance photographer & videographer. Portrait, wedding, event, and product photography plus videography.' } = Astro.props;
 const settings = await getSettings();
 const waLink = whatsappLink(settings.whatsapp, settings.whatsappMessage);
 ---
@@ -64,7 +64,7 @@ const waLink = whatsappLink(settings.whatsapp, settings.whatsappMessage);
         {settings.instagram && <a href={settings.instagram} target="_blank" rel="noopener" class="hover:text-neutral-900 dark:hover:text-white">Instagram</a>}
         {settings.linkedin && <a href={settings.linkedin} target="_blank" rel="noopener" class="hover:text-neutral-900 dark:hover:text-white">LinkedIn</a>}
       </div>
-      <p>© {new Date().getFullYear()} {settings.name}. All rights reserved.</p>
+      <p>© {new Date().getFullYear()} LightJourney. All rights reserved.</p>
     </footer>
 
     <script is:inline>

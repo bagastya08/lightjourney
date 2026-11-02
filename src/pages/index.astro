@@ -22,26 +22,30 @@ const heroImages = projects
   .filter((p: any) => p.category === 'Foto')
   .flatMap((p: any) => p.heroImageUrls);
 
-const pad = (n: number) => String(n).padStart(2, '0');
+// Hero reel: the "Bali Dynasty" video, else the newest uploaded video.
+const videos = projects.filter((p: any) => p.category === 'Video' && p.videoFileUrl);
+const heroVideo = (videos.find((p: any) => /dynast/i.test(p.title)) || videos[0])?.videoFileUrl;
+
+const pad =(n: number) => String(n).padStart(2, '0');
 const label = 'text-xs font-medium uppercase tracking-[0.2em] text-neutral-500';
 ---
 
 <Layout>
   <!-- Hero: oversized name wordmark, studio-style -->
-  <section class="relative left-1/2 right-1/2 -mx-[50vw] -mt-10 w-screen overflow-hidden px-4 pb-16 pt-28 sm:px-8 sm:pt-40">
-    <HeroBackground images={heroImages} />
-    <div class="relative mx-auto max-w-7xl">
-      <div class={`flex flex-wrap justify-between gap-2 ${label}`}>
+  <section class="relative left-1/2 right-1/2 -mx-[50vw] -mt-10 flex min-h-[90vh] w-screen items-center overflow-hidden px-4 pb-24 pt-28 text-white sm:px-8">
+    <HeroBackground images={heroImages} video={heroVideo} />
+    <div class="relative mx-auto w-full max-w-7xl">
+      <div class="flex flex-wrap justify-between gap-2 text-xs font-medium uppercase tracking-[0.2em] text-white/70">
         {settings.tags.map((tag: string) => <span>[ {tag} ]</span>)}
       </div>
-      <h1 class="mt-4 text-[17vw] font-extrabold uppercase leading-[0.85] tracking-tighter sm:text-[15vw] xl:text-[12rem]">
-        {settings.name}
+      <h1 class="mt-6">
+        <img src="/logo.svg" alt="LightJourney" class="w-full max-w-5xl" />
       </h1>
-      <div class="mt-8 flex flex-wrap items-end justify-between gap-6">
-        <p class="max-w-md text-lg text-neutral-700 dark:text-neutral-300">{settings.tagline}</p>
+      <div class="mt-10 flex flex-wrap items-end justify-between gap-6">
+        <p class="max-w-md text-lg text-white/80">{settings.tagline}</p>
         <div class="flex gap-3">
-          <a href="/booking" class="rounded-full bg-neutral-900 px-6 py-3 text-sm font-semibold text-white hover:opacity-90 dark:bg-white dark:text-neutral-900">Book a Session</a>
-          <a href={waLink} target="_blank" rel="noopener" class="rounded-full border border-black/20 px-6 py-3 text-sm font-semibold hover:bg-black/5 dark:border-white/30 dark:hover:bg-white/10">WhatsApp</a>
+          <a href="/booking" class="rounded-full bg-white px-6 py-3 text-sm font-semibold text-black hover:opacity-90">Book a Session</a>
+          <a href={waLink} target="_blank" rel="noopener" class="rounded-full border border-white/40 px-6 py-3 text-sm font-semibold hover:bg-white/10">WhatsApp</a>
         </div>
       </div>
     </div>
@@ -81,7 +85,7 @@ const label = 'text-xs font-medium uppercase tracking-[0.2em] text-neutral-500';
       Foto & video yang bercerita. Untuk momen, brand, dan event kamu.
     </h2>
     <p class="mt-6 max-w-2xl text-neutral-600 dark:text-neutral-400">
-      {settings.name} — freelance photographer & videographer, siap wujudkan momen dan brand kamu jadi visual yang berbicara.
+      LightJourney oleh {settings.name} — freelance photographer & videographer, siap wujudkan momen dan brand kamu jadi visual yang berbicara.
     </p>
     <div class="mt-8 flex flex-wrap gap-2">
       {settings.tools.map((tool: string) => (
