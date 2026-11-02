@@ -16,6 +16,11 @@ body {
   color: #111113;
 }
 
+.dark {
+  /* native controls (select dropdowns, date pickers) follow the dark theme */
+  color-scheme: dark;
+}
+
 .dark body {
   background: #010303;
   color: #f2f2f3;
