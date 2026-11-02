@@ -5,7 +5,8 @@ import { supabaseAdmin } from '../../../lib/supabase';
 import { formatDateId, SESSION_TYPES, normalizeWa, whatsappLink, getSettings } from '../../../lib/content';
 
 const { id } = Astro.params;
-const origin = Astro.url.origin;
+// Fixed public URL for client links; Astro.url.origin may be a protected *.vercel.app deployment URL.
+const origin = import.meta.env.PUBLIC_SITE_URL || Astro.url.origin;
 let booking: any, photosWithUrl: any[];
 const supabase = supabaseAdmin();
 const { data: b } = await supabase.from('bookings').select('*').eq('id', id).single();
