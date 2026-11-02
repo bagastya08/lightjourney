@@ -1,6 +1,6 @@
 ---
 // Full-bleed hero background: a muted looping video if given, else one photo.
-// Always darkened (both themes) so the white logo and text stay readable.
+// Tinted to the theme (light: white wash, dark: black) so logo and text stay readable.
 interface Props {
   images: string[];
   video?: string;
@@ -17,7 +17,7 @@ const poster = images[0];
     ) : (
       <img src={poster} alt="" class="h-full w-full object-cover" loading="eager" fetchpriority="high" />
     )}
-    <div class="absolute inset-0 bg-black/50"></div>
+    <div class="absolute inset-0 bg-white/60 dark:bg-black/50"></div>
     <div class="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-white to-transparent dark:from-[#010303]"></div>
   </div>
 )}
