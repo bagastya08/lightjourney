@@ -18,6 +18,7 @@ const { data: selections } = await supabase.from('selections').select('photo_id'
 const selectedIds = new Set((selections ?? []).map((s) => s.photo_id));
 
 photosWithUrl = (photos ?? []).map((p) => ({ ...p, url: p.storage_path, selected: selectedIds.has(p.id) }));
+const pickedNames: string[] = photosWithUrl.filter((p) => p.selected).map((p) => p.filename);
 
 const settings = await getSettings();
 const waNumber = normalizeWa(booking.whatsapp);
@@ -93,6 +94,16 @@ const waHref = whatsappLink(waNumber, waMessage);
     <p id="drive-status" class="mt-1 text-sm"></p>
   </div>
 
+  {pickedNames.length > 0 && (
+    <div class="mt-6 rounded-2xl border border-green-600/30 p-4">
+      <div class="flex flex-wrap items-center justify-between gap-2">
+        <p class="text-sm font-semibold">Dipilih client: {pickedNames.length} foto</p>
+        <button id="copy-picked" data-names={pickedNames.join('\n')} class="rounded-full border border-black/10 px-4 py-1.5 text-sm hover:bg-black/5 dark:border-white/15 dark:hover:bg-white/10">Salin nama file</button>
+      </div>
+      <textarea readonly rows={Math.min(pickedNames.length, 10)} class="mt-3 w-full rounded-xl bg-neutral-100 p-3 font-mono text-sm outline-none dark:bg-white/5">{pickedNames.join('\n')}</textarea>
+    </div>
+  )}
+
   <div class="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
     {photosWithUrl.map((p) => (
       <div class="relative overflow-hidden rounded-xl border border-black/10 dark:border-white/10">
@@ -137,6 +148,11 @@ const waHref = whatsappLink(waNumber, waMessage);
     document.getElementById('copy-code')?.addEventListener('click', (e) => {
       navigator.clipboard.writeText(e.target.dataset.link);
       e.target.textContent = 'tersalin!';
+    });
+
+    document.getElementById('copy-picked')?.addEventListener('click', (e) => {
+      navigator.clipboard.writeText(e.target.dataset.names);
+      e.target.textContent = 'Tersalin!';
     });
 
   </script>
