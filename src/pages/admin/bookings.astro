@@ -97,6 +97,9 @@ const STATUSES = ['new', 'confirmed', 'done', 'cancelled'];
   <script is:inline>
     document.getElementById('new-project').addEventListener('submit', async (e) => {
       e.preventDefault();
+      const submit = e.target.querySelector('[type=submit]');
+      if (submit.disabled) return;
+      submit.disabled = true; // double clicks used to create duplicate bookings
       const res = await fetch('/api/admin/bookings', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -104,7 +107,10 @@ const STATUSES = ['new', 'confirmed', 'done', 'cancelled'];
       });
       const data = await res.json();
       if (res.ok) location.href = `/admin/bookings/${data.id}`;
-      else document.getElementById('np-status').textContent = data.error || 'Gagal';
+      else {
+        submit.disabled = false;
+        document.getElementById('np-status').textContent = data.error || 'Gagal';
+      }
     });
 
     document.querySelectorAll('.status-select').forEach((sel) => {
