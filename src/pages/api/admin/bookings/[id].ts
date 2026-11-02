@@ -1,8 +1,21 @@
 import type { APIRoute } from 'astro';
 import { supabaseAdmin } from '../../../../lib/supabase';
 import { listDriveImages, driveThumb } from '../../../../lib/drive';
+import { isIsoDate } from '../../../../lib/content';
 
 export const prerender = false;
+
+// Photos and client selections go with it (on delete cascade in schema.sql).
+export const DELETE: APIRoute = async ({ params }) => {
+  try {
+    const { error } = await supabaseAdmin().from('bookings').delete().eq('id', params.id);
+    if (error) throw error;
+    return new Response(JSON.stringify({ ok: true }), { status: 200 });
+  } catch (err) {
+    const message = (err as { message?: string })?.message || 'Server belum terhubung ke database.';
+    return new Response(JSON.stringify({ error: message }), { status: 500 });
+  }
+};
 
 export const PATCH: APIRoute = async ({ params, request }) => {
   const body = await request.json();
@@ -27,6 +40,12 @@ export const PATCH: APIRoute = async ({ params, request }) => {
       update.quota = quota;
     }
     if (typeof body.title === 'string') update.title = body.title.trim() || null;
+    if (body.preferred_date !== undefined) {
+      if (!isIsoDate(body.preferred_date)) {
+        return new Response(JSON.stringify({ error: 'Tanggal tidak valid.' }), { status: 400 });
+      }
+      update.preferred_date = body.preferred_date;
+    }
 
     let driveFiles: { id: string; name: string }[] = [];
     if (typeof body.drive_url === 'string' && body.drive_url.trim()) {

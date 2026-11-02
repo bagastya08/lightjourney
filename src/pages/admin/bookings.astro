@@ -64,12 +64,15 @@ const STATUSES = ['new', 'confirmed', 'done', 'cancelled'];
 
   <div class="mt-6 space-y-3">
     {shown.map((b) => (
-      <div class="rounded-2xl border border-black/10 p-4 dark:border-white/10" data-id={b.id}>
+      <div class="booking-card rounded-2xl border border-black/10 p-4 dark:border-white/10" data-id={b.id}>
         <div class="flex flex-wrap items-start justify-between gap-2">
           <div>
             <p class="font-semibold">{b.name} — {SESSION_TYPES[b.session_type] || b.session_type}</p>
             <p class="text-xs text-neutral-500">{b.title ? `Publik: ${b.title}` : 'Tidak tampil di publik'}</p>
-            <p class="text-sm text-neutral-500">{b.preferred_date} {b.preferred_time || ''}</p>
+            <p class="text-sm text-neutral-500">
+              <input type="date" value={b.preferred_date} data-id={b.id} aria-label="Ubah tanggal" class="date-input rounded-lg border border-black/10 bg-transparent px-2 py-0.5 dark:border-white/15 dark:[color-scheme:dark]" />
+              {b.preferred_time || ''}
+            </p>
             <p class="text-sm text-neutral-500">
               {b.whatsapp && <a class="underline" target="_blank" href={`https://wa.me/${b.whatsapp.replace(/[^0-9]/g, '')}`}>{b.whatsapp}</a>}
               {b.email ? ` · ${b.email}` : ''}
@@ -83,6 +86,7 @@ const STATUSES = ['new', 'confirmed', 'done', 'cancelled'];
             <select class="status-select rounded-full border border-black/10 px-3 py-1.5 text-sm dark:border-white/15 dark:bg-neutral-900" data-id={b.id}>
               {STATUSES.map((s) => <option value={s} selected={s === b.status}>{s}</option>)}
             </select>
+            <button type="button" data-id={b.id} data-name={b.name} class="delete-btn rounded-full border border-red-500/40 px-4 py-1.5 text-sm font-medium text-red-600 hover:bg-red-500/10">Hapus</button>
           </div>
         </div>
       </div>
@@ -110,6 +114,28 @@ const STATUSES = ['new', 'confirmed', 'done', 'cancelled'];
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ status: sel.value })
         });
+      });
+    });
+
+    document.querySelectorAll('.date-input').forEach((input) => {
+      input.addEventListener('change', async () => {
+        if (!input.value) return;
+        const res = await fetch(`/api/admin/bookings/${input.dataset.id}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ preferred_date: input.value })
+        });
+        if (res.ok) location.reload();
+        else alert((await res.json()).error || 'Gagal ubah tanggal');
+      });
+    });
+
+    document.querySelectorAll('.delete-btn').forEach((btn) => {
+      btn.addEventListener('click', async () => {
+        if (!confirm(`Hapus booking "${btn.dataset.name}"? Foto dan pilihan client ikut terhapus. Tidak bisa dibatalkan.`)) return;
+        const res = await fetch(`/api/admin/bookings/${btn.dataset.id}`, { method: 'DELETE' });
+        if (res.ok) btn.closest('.booking-card').remove();
+        else alert((await res.json()).error || 'Gagal hapus');
       });
     });
   </script>
