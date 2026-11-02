@@ -3,6 +3,7 @@ export const prerender = false;
 import Layout from '../layouts/Layout.astro';
 import { supabaseAdmin } from '../lib/supabase';
 import BookedCalendar from '../components/BookedCalendar.astro';
+import { isValidSession, ADMIN_COOKIE } from '../lib/admin-auth';
 import { formatDateId, SESSION_TYPES, getSettings, normalizeWa, isIsoDate } from '../lib/content';
 
 let busyDates: string[] = [];
@@ -27,6 +28,8 @@ const isBusy = isValidDate && busyDates.includes(selected!);
 const settings = await getSettings();
 const ownerWa = normalizeWa(settings.whatsapp);
 const dateLabel = isValidDate ? formatDateId(selected!) : '';
+// Logged-in admin gets an admin action instead of the visitor booking flow.
+const isAdmin = isValidSession(Astro.cookies.get(ADMIN_COOKIE)?.value);
 
 ---
 
@@ -43,7 +46,9 @@ const dateLabel = isValidDate ? formatDateId(selected!) : '';
       <>
         <p class="text-lg font-semibold capitalize">{formatDateId(selected!)}</p>
         {isBusy && <p class="mt-1 text-sm text-neutral-500">Sudah ada jadwal di tanggal ini — tetap bisa ajukan, nanti dikonfirmasi lewat WhatsApp.</p>}
-        {isPast ? (
+        {isAdmin ? (
+          <a href={`/admin/bookings?tanggal=${selected}#panel`} class="mt-4 inline-block rounded-full bg-neutral-900 px-6 py-2.5 text-sm font-semibold text-white hover:opacity-90 dark:bg-white dark:text-black">+ Tambah project tanggal ini</a>
+        ) : isPast ? (
           <p class="mt-2 text-sm text-neutral-500">Tanggal ini sudah lewat.</p>
         ) : (
           <details class="group mt-4">
