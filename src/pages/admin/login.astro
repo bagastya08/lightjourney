@@ -1,0 +1,45 @@
+---
+export const prerender = false;
+import Layout from '../../layouts/Layout.astro';
+import { isValidSession, ADMIN_COOKIE } from '../../lib/admin-auth';
+
+if (isValidSession(Astro.cookies.get(ADMIN_COOKIE)?.value)) {
+  return Astro.redirect('/admin');
+}
+---
+
+<Layout title="Admin Login">
+  <div class="mx-auto mt-10 max-w-sm">
+    <h1 class="text-2xl font-bold">Admin Login</h1>
+    <form id="login-form" class="mt-6 space-y-4">
+      <div>
+        <label class="mb-1 block text-sm font-medium" for="password">Password</label>
+        <input required type="password" id="password" name="password" class="w-full rounded-xl border border-black/10 bg-transparent px-4 py-2.5 outline-none focus:border-neutral-900 dark:border-white/15 dark:focus:border-white" />
+      </div>
+      <button type="submit" class="w-full rounded-full bg-neutral-900 px-6 py-3 text-sm font-semibold text-white hover:opacity-90 dark:bg-white dark:text-black">
+        Masuk
+      </button>
+      <p id="login-status" class="text-sm text-red-600"></p>
+    </form>
+  </div>
+
+  <script is:inline>
+    const form = document.getElementById('login-form');
+    const status = document.getElementById('login-status');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      status.textContent = '';
+      const password = document.getElementById('password').value;
+      const res = await fetch('/api/admin/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password })
+      });
+      if (res.ok) {
+        location.href = '/admin';
+      } else {
+        status.textContent = 'Password salah.';
+      }
+    });
+  </script>
+</Layout>

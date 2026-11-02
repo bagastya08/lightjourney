@@ -1,0 +1,51 @@
+---
+interface Work {
+  slug: string;
+  title: string;
+  image: string | null;
+}
+
+interface Props {
+  title: string;
+  href: string;
+  items: Work[];
+}
+
+const { title, href, items } = Astro.props;
+const [main, second, third] = items;
+---
+
+{items.length > 0 && (
+  <a href={href} class="board-tile group block">
+    <div class="flex aspect-[4/3] gap-1 overflow-hidden rounded-2xl">
+      <div class="board-img h-full flex-[2] overflow-hidden">
+        {main.image && (
+          <img src={main.image} alt={main.title} class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
+        )}
+      </div>
+      {(second || third) && (
+        <div class="flex h-full flex-1 flex-col gap-1">
+          <div class="board-img h-full flex-1 overflow-hidden">
+            {second?.image && (
+              <img src={second.image} alt={second.title} class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
+            )}
+          </div>
+          <div class="board-img h-full flex-1 overflow-hidden">
+            {third?.image && (
+              <img src={third.image} alt={third.title} class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+    <h3 class="mt-3 text-base font-bold tracking-tight">{title}</h3>
+    <p class="text-sm text-neutral-500">{items.length} Foto</p>
+  </a>
+)}
+
+<style>
+  .board-img:first-child {
+    border-top-left-radius: 1rem;
+    border-bottom-left-radius: 1rem;
+  }
+</style>

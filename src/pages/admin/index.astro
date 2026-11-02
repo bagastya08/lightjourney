@@ -1,0 +1,62 @@
+---
+export const prerender = false;
+import Layout from '../../layouts/Layout.astro';
+import { supabaseAdmin } from '../../lib/supabase';
+
+let bookingCount = 0;
+let activeLinks = 0;
+let dbError = '';
+try {
+  const supabase = supabaseAdmin();
+  const [{ count: bc }, { count: pc }] = await Promise.all([
+    supabase.from('bookings').select('*', { count: 'exact', head: true }).eq('status', 'new'),
+    supabase.from('bookings').select('*', { count: 'exact', head: true }).not('token', 'is', null)
+  ]);
+  bookingCount = bc ?? 0;
+  activeLinks = pc ?? 0;
+} catch (err) {
+  dbError = err instanceof Error ? err.message : 'Database belum terhubung.';
+}
+---
+
+<Layout title="Admin Dashboard">
+  <div class="flex items-center justify-between">
+    <h1 class="text-2xl font-bold">Admin Dashboard</h1>
+    <button id="logout" class="text-sm text-neutral-500 hover:underline">Logout</button>
+  </div>
+
+  {dbError && (
+    <p class="mt-6 rounded-xl border border-amber-300 bg-amber-50 p-4 text-sm text-amber-800 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-300">
+      {dbError} — isi SUPABASE_URL & SUPABASE_SERVICE_ROLE_KEY di .env, lalu jalankan supabase/schema.sql.
+    </p>
+  )}
+
+  <div class="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
+    <a href="/admin/bookings" class="rounded-2xl border border-black/10 p-6 hover:bg-black/5 dark:border-white/10 dark:hover:bg-white/5">
+      <p class="text-sm text-neutral-500">Booking baru</p>
+      <p class="mt-1 text-3xl font-bold">{bookingCount}</p>
+      <p class="mt-2 text-sm font-medium underline">Lihat semua booking →</p>
+    </a>
+    <a href="/admin/bookings" class="rounded-2xl border border-black/10 p-6 hover:bg-black/5 dark:border-white/10 dark:hover:bg-white/5">
+      <p class="text-sm text-neutral-500">Link proofing aktif</p>
+      <p class="mt-1 text-3xl font-bold">{activeLinks}</p>
+      <p class="mt-2 text-sm font-medium underline">Kelola foto & pilihan client →</p>
+    </a>
+  </div>
+
+  <div class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
+    <a href="/admin/content" class="block rounded-2xl border border-black/10 p-6 hover:bg-black/5 dark:border-white/10 dark:hover:bg-white/5">
+      <p class="text-sm font-medium">Kelola foto & video portfolio →</p>
+    </a>
+    <a href="/admin/settings" class="block rounded-2xl border border-black/10 p-6 hover:bg-black/5 dark:border-white/10 dark:hover:bg-white/5">
+      <p class="text-sm font-medium">Kelola hero background, teks, kontak →</p>
+    </a>
+  </div>
+
+  <script is:inline>
+    document.getElementById('logout').addEventListener('click', async () => {
+      await fetch('/api/admin/logout', { method: 'POST' });
+      location.href = '/admin/login';
+    });
+  </script>
+</Layout>

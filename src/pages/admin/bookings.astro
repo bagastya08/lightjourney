@@ -1,0 +1,116 @@
+---
+export const prerender = false;
+import Layout from '../../layouts/Layout.astro';
+import { supabaseAdmin } from '../../lib/supabase';
+import BookedCalendar from '../../components/BookedCalendar.astro';
+import { formatDateId, SESSION_TYPES, isIsoDate } from '../../lib/content';
+
+let bookings: any[] = [];
+let dbError = '';
+try {
+  const supabase = supabaseAdmin();
+  const { data, error } = await supabase.from('bookings').select('*').order('preferred_date', { ascending: false });
+  if (error) throw error;
+  bookings = data ?? [];
+} catch (err) {
+  dbError = err instanceof Error ? err.message : 'Database belum terhubung.';
+}
+
+const raw = Astro.url.searchParams.get('tanggal');
+const selected = isIsoDate(raw) ? raw : null;
+const shown = selected ? bookings.filter((b) => b.preferred_date === selected) : bookings;
+const calendarDates = bookings.filter((b) => b.status !== 'cancelled').map((b) => b.preferred_date);
+
+const STATUSES = ['new', 'confirmed', 'done', 'cancelled'];
+---
+
+<Layout title="Bookings — Admin">
+  <a href="/admin" class="text-sm text-neutral-500 hover:underline">← Dashboard</a>
+  <h1 class="mt-2 text-2xl font-bold">Project & Booking</h1>
+
+  <BookedCalendar dates={calendarDates} />
+
+  <div id="panel" class="mt-8 flex scroll-mt-24 flex-wrap items-center justify-between gap-2">
+    <p class="text-lg font-semibold capitalize">{selected ? formatDateId(selected) : 'Semua project & booking'}</p>
+    {selected && <a href="/admin/bookings" class="text-sm text-neutral-500 hover:underline">Lihat semua</a>}
+  </div>
+
+  <details class="group mt-4 rounded-2xl border border-black/10 p-4 dark:border-white/10" open={!!selected}>
+    <summary class="cursor-pointer list-none text-sm font-semibold">+ Buat Booking{selected ? ` tanggal ${formatDateId(selected)}` : ''}</summary>
+    <form id="new-project" class="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
+      <div><label class="mb-1 block text-sm font-medium" for="np-name">Nama client *</label><input required id="np-name" name="name" class="w-full rounded-xl border border-black/10 bg-transparent px-3 py-2 outline-none dark:border-white/15 dark:bg-neutral-900" /></div>
+      <div><label class="mb-1 block text-sm font-medium" for="np-wa">WhatsApp client</label><input id="np-wa" name="whatsapp" placeholder="0812... / 62812..." class="w-full rounded-xl border border-black/10 bg-transparent px-3 py-2 outline-none dark:border-white/15 dark:bg-neutral-900" /></div>
+      <div>
+        <label class="mb-1 block text-sm font-medium" for="np-type">Jenis sesi</label>
+        <select id="np-type" name="session_type" class="w-full rounded-xl border border-black/10 bg-transparent px-3 py-2 outline-none dark:border-white/15 dark:bg-neutral-900">
+          {Object.entries(SESSION_TYPES).map(([value, label]) => <option value={value}>{label}</option>)}
+        </select>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div><label class="mb-1 block text-sm font-medium" for="np-date">Tanggal *</label><input required id="np-date" name="preferred_date" type="date" value={selected || undefined} class="w-full rounded-xl border border-black/10 bg-transparent px-3 py-2 outline-none dark:border-white/15 dark:bg-neutral-900" /></div>
+        <div><label class="mb-1 block text-sm font-medium" for="np-time">Jam</label><input id="np-time" name="preferred_time" type="time" class="w-full rounded-xl border border-black/10 bg-transparent px-3 py-2 outline-none dark:border-white/15 dark:bg-neutral-900" /></div>
+      </div>
+      <div><label class="mb-1 block text-sm font-medium" for="np-title">Nama project publik (kosong = tidak tampil)</label><input id="np-title" name="title" placeholder="Wedding Andi & Sari" class="w-full rounded-xl border border-black/10 bg-transparent px-3 py-2 outline-none dark:border-white/15 dark:bg-neutral-900" /></div>
+      <div><label class="mb-1 block text-sm font-medium" for="np-quota">Maks. foto dipilih</label><input id="np-quota" name="quota" type="number" min="1" value="5" class="w-full rounded-xl border border-black/10 bg-transparent px-3 py-2 outline-none dark:border-white/15 dark:bg-neutral-900" /></div>
+      <div class="sm:col-span-2"><label class="mb-1 block text-sm font-medium" for="np-notes">Catatan (lokasi, paket, dll)</label><textarea id="np-notes" name="notes" rows="2" class="w-full rounded-xl border border-black/10 bg-transparent px-3 py-2 outline-none dark:border-white/15 dark:bg-neutral-900"></textarea></div>
+      <div class="sm:col-span-2">
+        <button type="submit" class="rounded-full bg-neutral-900 px-5 py-2.5 text-sm font-semibold text-white dark:bg-white dark:text-black">Simpan Booking</button>
+        <p id="np-status" class="mt-2 text-sm text-red-600"></p>
+      </div>
+    </form>
+  </details>
+
+  {dbError && <p class="mt-4 text-sm text-amber-700">{dbError}</p>}
+
+  <div class="mt-6 space-y-3">
+    {shown.map((b) => (
+      <div class="rounded-2xl border border-black/10 p-4 dark:border-white/10" data-id={b.id}>
+        <div class="flex flex-wrap items-start justify-between gap-2">
+          <div>
+            <p class="font-semibold">{b.name} — {SESSION_TYPES[b.session_type] || b.session_type}</p>
+            <p class="text-xs text-neutral-500">{b.title ? `Publik: ${b.title}` : 'Tidak tampil di publik'}</p>
+            <p class="text-sm text-neutral-500">{b.preferred_date} {b.preferred_time || ''}</p>
+            <p class="text-sm text-neutral-500">
+              {b.whatsapp && <a class="underline" target="_blank" href={`https://wa.me/${b.whatsapp.replace(/[^0-9]/g, '')}`}>{b.whatsapp}</a>}
+              {b.email ? ` · ${b.email}` : ''}
+            </p>
+            {b.notes && <p class="mt-2 text-sm">{b.notes}</p>}
+          </div>
+          <div class="flex items-center gap-2">
+            <a href={`/admin/bookings/${b.id}`} class="rounded-full border border-black/10 px-4 py-1.5 text-sm font-medium hover:bg-black/5 dark:border-white/15 dark:hover:bg-white/10">
+              Kelola foto →
+            </a>
+            <select class="status-select rounded-full border border-black/10 px-3 py-1.5 text-sm dark:border-white/15 dark:bg-neutral-900" data-id={b.id}>
+              {STATUSES.map((s) => <option value={s} selected={s === b.status}>{s}</option>)}
+            </select>
+          </div>
+        </div>
+      </div>
+    ))}
+    {shown.length === 0 && !dbError && <p class="text-neutral-500">{selected ? 'Belum ada booking di tanggal ini — buat di atas.' : 'Belum ada booking.'}</p>}
+  </div>
+
+  <script is:inline>
+    document.getElementById('new-project').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const res = await fetch('/api/admin/bookings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(Object.fromEntries(new FormData(e.target)))
+      });
+      const data = await res.json();
+      if (res.ok) location.href = `/admin/bookings/${data.id}`;
+      else document.getElementById('np-status').textContent = data.error || 'Gagal';
+    });
+
+    document.querySelectorAll('.status-select').forEach((sel) => {
+      sel.addEventListener('change', async () => {
+        await fetch(`/api/admin/bookings/${sel.dataset.id}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status: sel.value })
+        });
+      });
+    });
+  </script>
+</Layout>

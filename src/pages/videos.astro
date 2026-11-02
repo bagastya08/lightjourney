@@ -1,0 +1,58 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getProjects } from '../lib/content';
+
+function embedUrl(url: string) {
+  try {
+    const u = new URL(url);
+    if (u.hostname.includes('youtube.com')) {
+      const id = u.searchParams.get('v');
+      return id ? `https://www.youtube.com/embed/${id}` : url;
+    }
+    if (u.hostname.includes('youtu.be')) {
+      return `https://www.youtube.com/embed/${u.pathname.slice(1)}`;
+    }
+    if (u.hostname.includes('vimeo.com')) {
+      return `https://player.vimeo.com/video/${u.pathname.split('/').pop()}`;
+    }
+    return url;
+  } catch {
+    return url;
+  }
+}
+
+const videos = (await getProjects()).filter((p: any) => p.category === 'Video' && (p.videoFileUrl || p.videoUrl));
+---
+
+<Layout title="Videos — Videography Portfolio">
+  <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">Videos</h1>
+  <p class="mt-2 text-neutral-600 dark:text-neutral-400">Reel & hasil produksi video.</p>
+
+  {videos.length > 0 ? (
+    <div class="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2">
+      {videos.map((item: any) => (
+        <div class="overflow-hidden rounded-2xl border border-black/5 dark:border-white/10">
+          <div class="aspect-video bg-black">
+            {item.videoFileUrl ? (
+              <video src={item.videoFileUrl} controls preload="metadata" class="h-full w-full" />
+            ) : (
+              <iframe
+                src={embedUrl(item.videoUrl)}
+                title={item.title}
+                loading="lazy"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+                class="h-full w-full"
+              ></iframe>
+            )}
+          </div>
+          <p class="p-3 text-sm font-medium">{item.title}</p>
+        </div>
+      ))}
+    </div>
+  ) : (
+    <p class="mt-16 rounded-2xl border border-dashed border-black/10 p-10 text-center text-neutral-500 dark:border-white/10">
+      Belum ada video. Tambahkan lewat <a href="/admin/content" class="underline">/admin/content</a>.
+    </p>
+  )}
+</Layout>

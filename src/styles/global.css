@@ -1,0 +1,32 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
+    "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: #ffffff;
+  color: #111113;
+}
+
+.dark body {
+  background: #010303;
+  color: #f2f2f3;
+}
+
+::selection {
+  background: #111113;
+  color: #fff;
+}
+
+.dark ::selection {
+  background: #f2f2f3;
+  color: #111113;
+}

@@ -1,0 +1,82 @@
+---
+// Two-month calendar. Every day links to `?tanggal=YYYY-MM-DD` (server-rendered,
+// no JS); the page reads that param and shows its own panel. Booked days get an
+// Apple-Calendar-style filled circle (red light / lime dark), the picked day a ring.
+interface Props {
+  dates: string[];
+}
+import { isIsoDate } from '../lib/content';
+const { dates } = Astro.props;
+const booked = new Set(dates);
+const params = Astro.url.searchParams;
+const raw = params.get('tanggal');
+const selected = isIsoDate(raw) ? raw : null;
+const today = new Date().toLocaleDateString('sv-SE'); // YYYY-MM-DD local
+
+// Open on the picked date's month so the ring stays visible after a click.
+const now = new Date();
+const base = selected ? new Date(`${selected}T00:00:00`) : now;
+const defaultOffset = (base.getFullYear() - now.getFullYear()) * 12 + base.getMonth() - now.getMonth();
+const offset = params.has('m') ? Number(params.get('m')) || 0 : defaultOffset;
+
+function monthGrid(monthOffset: number) {
+  const first = new Date(now.getFullYear(), now.getMonth() + monthOffset, 1);
+  const label = first.toLocaleDateString('id-ID', { month: 'long', year: 'numeric' });
+  const daysInMonth = new Date(first.getFullYear(), first.getMonth() + 1, 0).getDate();
+  const cells: (string | null)[] = Array(first.getDay()).fill(null);
+  for (let d = 1; d <= daysInMonth; d++) {
+    cells.push(`${first.getFullYear()}-${String(first.getMonth() + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`);
+  }
+  return { label, cells };
+}
+
+const months = [monthGrid(offset), monthGrid(offset + 1)];
+const weekdays = ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'];
+const navClass = 'rounded-full px-3 py-1 text-sm font-medium hover:bg-black/5 dark:hover:bg-white/10';
+const keepDate = selected ? `&tanggal=${selected}` : '';
+---
+
+<div class="mt-8">
+  <div class="mb-3 flex items-center justify-between">
+    <a href={`?m=${offset - 1}${keepDate}`} class={navClass} aria-label="Bulan sebelumnya">‹ Sebelumnya</a>
+    {offset !== 0 && <a href="?" class={navClass}>Hari ini</a>}
+    <a href={`?m=${offset + 1}${keepDate}`} class={navClass} aria-label="Bulan berikutnya">Berikutnya ›</a>
+  </div>
+  <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+    {months.map((m) => (
+      <div class="rounded-2xl border border-black/10 p-4 dark:border-white/10">
+        <p class="mb-3 text-center text-sm font-semibold capitalize">{m.label}</p>
+        <div class="grid grid-cols-7 gap-1 text-center text-xs text-neutral-500">
+          {weekdays.map((w) => <span>{w}</span>)}
+        </div>
+        <div class="mt-1 grid grid-cols-7 gap-1">
+          {m.cells.map((date) =>
+            date === null ? (
+              <span></span>
+            ) : (
+              <a
+                href={`?m=${offset}&tanggal=${date}#panel`}
+                aria-label={date}
+                aria-current={date === selected ? 'date' : undefined}
+                class:list={[
+                  'mx-auto flex h-9 w-9 items-center justify-center rounded-full text-sm transition-colors',
+                  booked.has(date)
+                    ? 'bg-[#FF3B30] font-semibold text-white hover:opacity-80 dark:bg-[#C0F000] dark:text-black'
+                    : date === today
+                      ? 'font-semibold text-[#FF3B30] hover:bg-black/5 dark:text-[#C0F000] dark:hover:bg-white/10'
+                      : 'text-neutral-700 hover:bg-black/5 dark:text-neutral-300 dark:hover:bg-white/10',
+                  date === selected && 'ring-2 ring-neutral-900 ring-offset-2 ring-offset-white dark:ring-white dark:ring-offset-black'
+                ]}
+              >
+                {Number(date.slice(8))}
+              </a>
+            )
+          )}
+        </div>
+      </div>
+    ))}
+  </div>
+  <p class="mt-2 flex items-center gap-2 text-xs text-neutral-500">
+    <span class="inline-block h-3 w-3 rounded-full bg-[#FF3B30] dark:bg-[#C0F000]"></span> Sudah ada jadwal · klik tanggal untuk detail
+  </p>
+</div>

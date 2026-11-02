@@ -1,0 +1,25 @@
+---
+// Masonry poster wall, same technique as the Gallery page — each tile keeps
+// its own native aspect ratio instead of being force-cropped into a box.
+interface Props {
+  images: string[];
+}
+
+const { images } = Astro.props;
+const tiles = images.slice(0, 24);
+---
+
+{tiles.length > 0 && (
+  <div class="absolute inset-0 overflow-hidden">
+    <div
+      class="columns-3 gap-2 sm:columns-4 lg:columns-6"
+      style="mask-image: radial-gradient(ellipse at center, black 55%, transparent 100%); -webkit-mask-image: radial-gradient(ellipse at center, black 55%, transparent 100%);"
+    >
+      {tiles.map((src) => (
+        <img src={src} alt="" class="mb-2 block w-full rounded-xl [break-inside:avoid]" loading="eager" />
+      ))}
+    </div>
+    <div class="absolute inset-0 bg-white/70 backdrop-blur-[2px] dark:bg-black/70"></div>
+    <div class="absolute inset-0 bg-gradient-to-t from-white via-white/30 to-white/60 dark:from-black dark:via-black/30 dark:to-black/60"></div>
+  </div>
+)}

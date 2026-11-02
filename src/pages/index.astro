@@ -1,17 +1,76 @@
 ---
+import Layout from '../layouts/Layout.astro';
+import CategoryStack from '../components/CategoryStack.astro';
+import HeroBackground from '../components/HeroBackground.astro';
+import { getSettings, getCategories, getProjects, whatsappLink } from '../lib/content';
 
+const settings = await getSettings();
+const groups = await getCategories();
+const projects = await getProjects();
+const waLink = whatsappLink(settings.whatsapp, settings.whatsappMessage);
+
+const featuredByCategory = groups
+  .map((group: any) => {
+    const groupProjects = projects.filter((p: any) => p.groupId === group._id && p.category === 'Foto');
+    const items = groupProjects.flatMap((p: any) =>
+      p.imageUrls.map((img: any) => ({ slug: img.key, title: p.title, image: img.url }))
+    );
+    return { key: group._id, label: group.title, items };
+  })
+  .filter((cat: any) => cat.items.length > 0);
+
+const heroImages = projects
+  .filter((p: any) => p.category === 'Foto')
+  .flatMap((p: any) => p.heroImageUrls);
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<Layout>
+  <section class="relative left-1/2 right-1/2 -mx-[50vw] -mt-10 w-screen overflow-hidden bg-white px-6 py-24 text-center sm:py-32 dark:bg-neutral-900">
+    <HeroBackground images={heroImages} />
+    <div class="relative">
+      <h1 class="text-4xl font-extrabold tracking-tight text-neutral-900 sm:text-6xl dark:text-white">
+        {settings.tagline}
+      </h1>
+      <p class="mx-auto mt-4 max-w-xl text-neutral-900/70 dark:text-white/70">
+        {settings.name} — freelance photographer & videographer, siap wujudkan momen dan brand kamu jadi visual yang berbicara.
+      </p>
+      <div class="mt-8 flex flex-wrap justify-center gap-2">
+        {settings.tags.map((tag: string) => (
+          <span class="rounded-full bg-black/5 px-4 py-1.5 text-sm font-medium text-neutral-900 backdrop-blur dark:bg-white/10 dark:text-white">
+            #{tag}
+          </span>
+        ))}
+      </div>
+      <div class="mt-4 flex flex-wrap justify-center gap-2">
+        {settings.tools.map((tool: string) => (
+          <span class="rounded-lg border border-black/10 bg-black/5 px-2.5 py-1 text-xs font-medium text-neutral-900/80 backdrop-blur dark:border-white/20 dark:bg-white/5 dark:text-white/80">
+            {tool}
+          </span>
+        ))}
+      </div>
+      <div class="mt-10 flex justify-center gap-3">
+        <a href="/booking" class="rounded-full bg-neutral-900 px-6 py-3 text-sm font-semibold text-white hover:opacity-90 dark:bg-white dark:text-neutral-900">
+          Book a Session
+        </a>
+        <a href={waLink} target="_blank" rel="noopener" class="rounded-full border border-black/20 px-6 py-3 text-sm font-semibold text-neutral-900 hover:bg-black/5 dark:border-white/30 dark:text-white dark:hover:bg-white/10">
+          Chat on WhatsApp
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="mt-24">
+    <h2 class="mb-6 text-2xl font-bold tracking-tight">Portfolio</h2>
+    {featuredByCategory.length > 0 ? (
+      <div class="grid grid-cols-2 gap-6 sm:grid-cols-3">
+        {featuredByCategory.map((cat: any) => (
+          <CategoryStack title={cat.label} href={`/gallery?category=${cat.key}`} items={cat.items} />
+        ))}
+      </div>
+    ) : (
+      <p class="rounded-2xl border border-dashed border-black/10 p-10 text-center text-neutral-500 dark:border-white/10">
+        Belum ada karya ditambahkan. Buka <a href="/admin/content" class="underline">/admin/content</a> untuk menambahkan foto & video pertama kamu.
+      </p>
+    )}
+  </section>
+</Layout>
