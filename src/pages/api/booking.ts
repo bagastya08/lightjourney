@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import { supabaseAdmin } from '../../lib/supabase';
+import { insertBooking } from '../../lib/supabase';
 import { SESSION_TYPES, isIsoDate } from '../../lib/content';
 
 export const prerender = false;
@@ -36,16 +36,16 @@ export const POST: APIRoute = async ({ request }) => {
   }
 
   try {
-    const { error } = await supabaseAdmin().from('bookings').insert({
+    await insertBooking({
       name,
       whatsapp,
       email: email || null,
       session_type,
       preferred_date,
       preferred_time: preferred_time || null,
-      notes: notes || null
+      notes: notes || null,
+      source: 'web'
     });
-    if (error) throw error;
     return new Response(JSON.stringify({ ok: true }), { status: 200 });
   } catch {
     return new Response(JSON.stringify({ error: 'Gagal menyimpan booking, coba lagi atau hubungi lewat WhatsApp.' }), { status: 500 });

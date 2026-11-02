@@ -41,7 +41,7 @@ const waHref = whatsappLink(waNumber, waMessage);
 ---
 
 <Layout title={`${booking.name} — Admin`}>
-  <a href="/admin/bookings" class="text-sm text-neutral-500 hover:underline">← Semua booking</a>
+  <a href="/admin/bookings" class="text-sm text-neutral-500 hover:underline">← Semua project</a>
   <h1 class="mt-2 text-2xl font-bold">{booking.name}</h1>
   <p class="text-sm capitalize text-neutral-500">{SESSION_TYPES[booking.session_type] || booking.session_type} · {formatDateId(booking.preferred_date)} {booking.preferred_time?.slice(0, 5) || ''}</p>
   {booking.whatsapp && (

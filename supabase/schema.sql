@@ -70,3 +70,9 @@ alter table bookings alter column token set default gen_access_code();
 alter table bookings alter column quota set default 5;
 update bookings set token = gen_access_code() where token is null;
 update bookings set quota = 5 where quota is null;
+
+-- Where a row came from: 'web' = client booked on the website, 'admin' = you added the project.
+-- Rows that existed before this column were all added from admin.
+alter table bookings add column if not exists source text;
+update bookings set source = 'admin' where source is null;
+alter table bookings alter column source set default 'web';

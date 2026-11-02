@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import { supabaseAdmin } from '../../../lib/supabase';
+import { insertBooking } from '../../../lib/supabase';
 import { normalizeWa, isIsoDate } from '../../../lib/content';
 
 export const prerender = false;
@@ -13,9 +13,7 @@ export const POST: APIRoute = async ({ request }) => {
   }
 
   try {
-    const { data, error } = await supabaseAdmin()
-      .from('bookings')
-      .insert({
+    const id = await insertBooking({
         name,
         whatsapp: normalizeWa(b.whatsapp) || null,
         session_type: b.session_type || 'other',
@@ -24,12 +22,10 @@ export const POST: APIRoute = async ({ request }) => {
         notes: b.notes?.trim() || null,
         title: b.title?.trim() || null,
         quota: Number(b.quota) >= 1 ? Math.floor(Number(b.quota)) : undefined,
-        status: 'confirmed'
-      })
-      .select('id')
-      .single();
-    if (error) throw error;
-    return new Response(JSON.stringify({ ok: true, id: data.id }), { status: 200 });
+        status: 'confirmed',
+        source: 'admin'
+      });
+    return new Response(JSON.stringify({ ok: true, id }), { status: 200 });
   } catch (err) {
     const message = (err as { message?: string })?.message || 'Server belum terhubung ke database.';
     return new Response(JSON.stringify({ error: message }), { status: 500 });
