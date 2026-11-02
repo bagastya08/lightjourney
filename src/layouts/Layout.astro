@@ -32,14 +32,8 @@ const waLink = whatsappLink(settings.whatsapp, settings.whatsappMessage);
     <header class="sticky top-4 z-50 flex justify-center px-4">
       <nav class="flex w-full max-w-3xl items-center justify-between gap-4 rounded-2xl border border-black/5 bg-white/70 px-3 py-2 shadow-sm backdrop-blur-xl dark:border-white/10 dark:bg-black/50">
         <a href="/" class="flex items-center gap-2 rounded-full pl-1 pr-3 py-1 hover:bg-black/5 dark:hover:bg-white/10">
-          {settings.avatar ? (
-            <img src={settings.avatar} alt={settings.name} class="h-8 w-8 rounded-full object-cover" />
-          ) : (
-            <span class="flex h-8 w-8 items-center justify-center rounded-full bg-neutral-900 text-sm font-semibold text-white dark:bg-white dark:text-black">
-              {settings.name.charAt(0)}
-            </span>
-          )}
-          <span class="text-sm font-semibold">{settings.name}</span>
+          <!-- logo.svg is white; invert it on the light theme -->
+          <img src="/logo.svg" alt={settings.name} class="h-8 w-auto invert dark:invert-0" />
         </a>
         <div class="hidden items-center gap-1 sm:flex">
           <a href="/" class="rounded-lg px-4 py-2 text-sm font-medium hover:bg-black/5 dark:hover:bg-white/10">Home</a>
