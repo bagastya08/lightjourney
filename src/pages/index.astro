@@ -22,9 +22,11 @@ const heroImages = projects
   .filter((p: any) => p.category === 'Foto')
   .flatMap((p: any) => p.heroImageUrls);
 
-// Hero reel: the "Bali Dynasty" video, else the newest uploaded video.
+// Hero reel: the "Bali Dynasty" video (pre-compressed 720p copy in public/hero.mp4,
+// the Sanity original is 54 MB), else the newest uploaded video.
 const videos = projects.filter((p: any) => p.category === 'Video' && p.videoFileUrl);
-const heroVideo = (videos.find((p: any) => /dynast/i.test(p.title)) || videos[0])?.videoFileUrl;
+const dynasty = videos.find((p: any) => /dynast/i.test(p.title));
+const heroVideo = dynasty ? '/hero.mp4' : videos[0]?.videoFileUrl;
 
 const pad =(n: number) => String(n).padStart(2, '0');
 const label = 'text-xs font-medium uppercase tracking-[0.2em] text-neutral-500';
