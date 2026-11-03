@@ -7,12 +7,9 @@ const groups = await getCategories();
 const projects = (await getProjects()).filter(
   (p: any) => (p.category === 'Foto' && p.imageUrls.length) || (p.category === 'Video' && (p.videoFileUrl || p.videoUrl))
 );
-// Filter tabs: categories that have photo work, plus Video.
-const tabs = [
-  ...groups.filter((g: any) => projects.some((p: any) => p.category === 'Foto' && p.groupId === g._id)).map((g: any) => ({ key: g._id, label: g.title })),
-  ...(projects.some((p: any) => p.category === 'Video') ? [{ key: 'video', label: 'Video' }] : [])
-];
-const tab = (p: any) => (p.category === 'Video' ? 'video' : p.groupId);
+// Filter tabs: every category from admin; videos sit in their own category.
+const tabs = groups.map((g: any) => ({ key: g._id, label: g.title }));
+const tab = (p: any) => p.groupId;
 ---
 
 <Layout title="Works — LightJourney">
@@ -28,6 +25,8 @@ const tab = (p: any) => (p.category === 'Video' ? 'video' : p.groupId);
     <button data-tab="" class="tab-btn flex-none border px-6 border-black/15 bg-white py-3 text-sm uppercase tracking-wide text-black transition-colors hover:bg-neutral-200 aria-pressed:border-neutral-800 aria-pressed:bg-black aria-pressed:text-white" aria-pressed="true">All</button>
     {tabs.map((t) => <button data-tab={t.key} class="tab-btn flex-none border px-6 border-black/15 bg-white py-3 text-sm uppercase tracking-wide text-black transition-colors hover:bg-neutral-200 aria-pressed:border-neutral-800 aria-pressed:bg-black aria-pressed:text-white" aria-pressed="false">{t.label}</button>)}
   </div>
+
+  <p id="works-empty" class="mt-16 hidden border border-dashed border-black/10 p-10 text-center text-neutral-500 dark:border-white/10">Belum ada karya di kategori ini.</p>
 
   {projects.length > 0 ? (
     <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-12 sm:grid-cols-2">
@@ -47,7 +46,7 @@ const tab = (p: any) => (p.category === 'Video' ? 'video' : p.groupId);
               <h2 class="min-w-0 text-xl font-bold tracking-tight">{p.title}</h2>
               <span class="shrink-0 text-xs font-semibold uppercase tracking-[0.2em] text-neutral-500 transition-colors group-hover:text-accent">View project →</span>
             </div>
-            <p class="mt-1 text-sm text-neutral-500">{p.category === 'Video' ? 'Video' : p.groupTitle}{p.client && ` · ${p.client}`}</p>
+            <p class="mt-1 text-sm text-neutral-500">{p.groupTitle}{p.category === 'Video' && ' · Video'}{p.client && ` · ${p.client}`}</p>
           </a>
         );
       })}
@@ -61,7 +60,13 @@ const tab = (p: any) => (p.category === 'Video' ? 'video' : p.groupId);
   <script is:inline>
     function applyTab(key) {
       document.querySelectorAll('.tab-btn').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.tab === key)));
-      document.querySelectorAll('.work-card').forEach((c) => (c.style.display = !key || c.dataset.tab === key ? '' : 'none'));
+      let shown = 0;
+      document.querySelectorAll('.work-card').forEach((c) => {
+        const on = !key || c.dataset.tab === key;
+        c.style.display = on ? '' : 'none';
+        shown += on;
+      });
+      document.getElementById('works-empty')?.classList.toggle('hidden', shown > 0);
     }
     document.querySelectorAll('.tab-btn').forEach((b) => b.addEventListener('click', () => {
       applyTab(b.dataset.tab);
