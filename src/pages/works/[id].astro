@@ -1,0 +1,145 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getProjects } from '../../lib/content';
+import { embedUrl } from '../../lib/video';
+
+const project = (await getProjects()).find((p: any) => p._id === Astro.params.id);
+if (!project) return Astro.redirect('/works');
+
+const photos = project.imageUrls.map((img: any) => ({
+  key: img.key,
+  url: img.url,
+  downloadUrl: img.downloadUrl,
+  width: img.width,
+  height: img.height,
+  title: project.title,
+  client: project.client || '',
+  groupTitle: project.groupTitle,
+  description: project.description || ''
+}));
+const isVideo = project.category === 'Video';
+---
+
+<Layout title={`${project.title} — LightJourney`}>
+  <a href={isVideo ? '/works?category=video' : `/works?category=${project.groupId}`} class="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-500 hover:text-accent">← Works</a>
+  <p class="mt-8 text-xs font-medium uppercase tracking-[0.2em] text-neutral-500"><span class="text-accent">[</span> {isVideo ? 'Video' : project.groupTitle} <span class="text-accent">]</span></p>
+  <h1 class="mt-2 text-4xl font-bold leading-none tracking-tight sm:text-6xl">{project.title}</h1>
+  {project.client && <p class="mt-3 text-sm text-neutral-500">Client · {project.client}</p>}
+  {project.description && <p class="mt-4 max-w-2xl text-neutral-600 dark:text-neutral-400">{project.description}</p>}
+
+  {isVideo ? (
+    <div class="mt-10 aspect-video bg-black">
+      {project.videoFileUrl ? (
+        <video src={project.videoFileUrl} controls playsinline preload="metadata" class="h-full w-full"></video>
+      ) : (
+        <iframe src={embedUrl(project.videoUrl)} title={project.title} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen class="h-full w-full"></iframe>
+      )}
+    </div>
+  ) : (
+    <div id="masonry" class="mt-8 columns-1 gap-4 sm:columns-2 lg:columns-3">
+      {photos.map((item: any) => (
+        <button
+          type="button"
+          class="photo-btn group relative mb-4 block w-full break-inside-avoid overflow-hidden text-left shadow-sm transition-shadow duration-300 hover:shadow-2xl"
+         
+          data-title={item.title}
+          data-client={item.client}
+          data-group={item.groupTitle}
+          data-description={item.description}
+          data-url={item.url}
+          data-download-url={item.downloadUrl}
+        >
+          <img src={item.url} alt={item.title} width={item.width} height={item.height} loading="lazy" class="w-full object-cover transition-transform duration-500 ease-out group-hover:scale-110" />
+          <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-black/0 to-black/0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
+          <div class="pointer-events-none absolute inset-x-0 bottom-0 translate-y-3 p-4 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+            <p class="text-sm font-semibold text-white">{item.title}</p>
+          </div>
+        </button>
+      ))}
+    </div>
+  )}
+
+  <div id="lightbox" class="fixed inset-0 z-[60] hidden items-center justify-center bg-black/90 p-4">
+    <button id="lightbox-close" class="absolute right-4 top-4 flex h-10 w-10 items-center justify-center bg-white/10 text-white hover:bg-white/20">✕</button>
+    <div class="max-h-full w-full max-w-3xl overflow-y-auto bg-white dark:bg-neutral-900">
+      <img id="lightbox-img" src="" alt="" class="max-h-[70vh] w-full object-contain bg-black" />
+      <div class="p-5">
+        <p id="lightbox-group" class="text-xs font-medium uppercase tracking-wide text-neutral-500"></p>
+        <div class="mt-1 flex flex-wrap items-center gap-2">
+          <h3 id="lightbox-title" class="text-xl font-bold"></h3>
+          <span id="lightbox-client" class="hidden bg-black/5 px-3 py-1 text-xs font-medium dark:bg-white/10"></span>
+        </div>
+        <p id="lightbox-description" class="mt-2 text-sm text-neutral-600 dark:text-neutral-400"></p>
+        <button id="lightbox-download" class="mt-4 inline-flex items-center gap-2 bg-neutral-900 px-5 py-2.5 text-sm font-semibold text-white hover:opacity-90 dark:bg-white dark:text-black">
+          Download Foto
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script is:inline>
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    const lightboxGroup = document.getElementById('lightbox-group');
+    const lightboxTitle = document.getElementById('lightbox-title');
+    const lightboxClient = document.getElementById('lightbox-client');
+    const lightboxDescription = document.getElementById('lightbox-description');
+    const lightboxDownload = document.getElementById('lightbox-download');
+
+    function openLightbox(btn) {
+      lightboxImg.src = btn.dataset.url;
+      lightboxImg.alt = btn.dataset.title;
+      lightboxGroup.textContent = btn.dataset.group || '';
+      lightboxTitle.textContent = btn.dataset.title || '';
+      if (btn.dataset.client) {
+        lightboxClient.textContent = btn.dataset.client;
+        lightboxClient.classList.remove('hidden');
+      } else {
+        lightboxClient.classList.add('hidden');
+      }
+      lightboxDescription.textContent = btn.dataset.description || 'Belum ada deskripsi acara ini.';
+      lightboxDownload.dataset.url = btn.dataset.downloadUrl || btn.dataset.url;
+      lightboxDownload.dataset.filename = (btn.dataset.title || 'foto').replace(/[^a-z0-9]+/gi, '-').toLowerCase();
+      lightbox.classList.remove('hidden');
+      lightbox.classList.add('flex');
+      document.body.style.overflow = 'hidden';
+    }
+
+    lightboxDownload.addEventListener('click', async () => {
+      const originalText = lightboxDownload.textContent;
+      lightboxDownload.textContent = 'Menyiapkan...';
+      try {
+        const res = await fetch(lightboxDownload.dataset.url);
+        const blob = await res.blob();
+        const ext = blob.type.split('/')[1] || 'jpg';
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${lightboxDownload.dataset.filename}.${ext}`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+      } finally {
+        lightboxDownload.textContent = originalText;
+      }
+    });
+
+    function closeLightbox() {
+      lightbox.classList.add('hidden');
+      lightbox.classList.remove('flex');
+      document.body.style.overflow = '';
+    }
+
+    document.querySelectorAll('.photo-btn').forEach((btn) => {
+      btn.addEventListener('click', () => openLightbox(btn));
+    });
+    document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
+    lightbox.addEventListener('click', (e) => {
+      if (e.target === lightbox) closeLightbox();
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeLightbox();
+    });
+  </script>
+</Layout>

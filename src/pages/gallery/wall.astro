@@ -10,12 +10,8 @@ const activeCategory = categories.find((c: any) => c._id === categoryParam) || c
 
 const photos = projects
   .filter((p: any) => !activeCategory || p.groupId === activeCategory._id)
-  .flatMap((p: any) => p.imageUrls.map((img: any) => img.url));
-
-const COLUMN_COUNT = 5;
-const columns = Array.from({ length: COLUMN_COUNT }, (_, i) =>
-  photos.filter((_: any, idx: number) => idx % COLUMN_COUNT === i)
-).filter((col) => col.length > 0);
+  // Wall tiles are ~250px wide: a small rendition keeps phones from running out of memory.
+  .flatMap((p: any) => p.imageUrls.map((img: any) => img.url.replace('w=1200', 'w=500')));
 ---
 
 <!doctype html>
@@ -32,9 +28,9 @@ const columns = Array.from({ length: COLUMN_COUNT }, (_, i) =>
       }
     </script>
   </head>
-  <body class="h-screen overflow-hidden bg-black font-sans antialiased">
+  <body class="h-dvh overflow-hidden bg-black font-sans antialiased">
     <a
-      href="/gallery"
+      href={activeCategory ? `/works?category=${activeCategory._id}` : '/works'}
       aria-label="Kembali"
       class="fixed left-4 top-4 z-50 flex h-10 w-10 items-center justify-center bg-white/10 text-white backdrop-blur hover:bg-white/20"
     >
@@ -51,13 +47,13 @@ const columns = Array.from({ length: COLUMN_COUNT }, (_, i) =>
     </button>
 
     {categories.length > 1 && (
-      <div class="fixed bottom-6 left-1/2 z-50 flex -translate-x-1/2 gap-1 bg-white/10 p-1 backdrop-blur">
+      <div class="fixed bottom-6 left-1/2 z-50 flex max-w-[calc(100vw-2rem)] -translate-x-1/2 gap-1 overflow-x-auto whitespace-nowrap bg-black/60 p-1 backdrop-blur [scrollbar-width:none]">
         {categories.map((c: any) => (
           <a
             href={`/gallery/wall?category=${c._id}`}
             class:list={[
-              ' px-4 py-2 text-sm font-medium transition-colors',
-              c._id === activeCategory?._id ? 'bg-white text-black' : 'text-white/70 hover:text-white'
+              'shrink-0 px-4 py-2 text-sm font-medium transition-colors',
+              c._id === activeCategory?._id ? 'bg-accent text-white' : 'text-white/70 hover:text-white'
             ]}
           >
             {c.title}
@@ -66,20 +62,10 @@ const columns = Array.from({ length: COLUMN_COUNT }, (_, i) =>
       </div>
     )}
 
-    {columns.length > 0 ? (
-      <div class="wall-grid grid h-screen grid-cols-2 gap-2 p-2 sm:grid-cols-4 lg:grid-cols-5">
-        {columns.map((col) => (
-          <div class="wall-col no-scrollbar relative h-full overflow-hidden">
-            <div class="flex flex-col gap-2">
-              {[...col, ...col].map((src) => (
-                <img src={src} alt="" class="w-full object-cover" loading="eager" />
-              ))}
-            </div>
-          </div>
-        ))}
-      </div>
+    {photos.length > 0 ? (
+      <div class="wall-grid flex h-dvh gap-2 p-2" data-photos={JSON.stringify(photos)}></div>
     ) : (
-      <p class="flex h-screen items-center justify-center text-white/60">Belum ada foto di kategori ini.</p>
+      <p class="flex h-dvh items-center justify-center text-white/60">Belum ada foto di kategori ini.</p>
     )}
 
     <style>
@@ -103,8 +89,45 @@ const columns = Array.from({ length: COLUMN_COUNT }, (_, i) =>
       const RESUME_RAMP_MS = 500; // how long the ease-in takes
 
       const grid = document.querySelector('.wall-grid');
-      const cols = [...document.querySelectorAll('.wall-col')];
-      cols.forEach((col, i) => { col.scrollTop = i * 150; });
+      let cols = [];
+      function build() {
+        if (!grid) return;
+        const photos = JSON.parse(grid.dataset.photos || '[]');
+        const w = innerWidth;
+        const n = Math.max(1, Math.min(photos.length, w < 640 ? 2 : w < 1024 ? 4 : 5));
+        grid.innerHTML = '';
+        cols = Array.from({ length: n }, (_, i) => {
+          const col = document.createElement('div');
+          col.className = 'wall-col no-scrollbar relative h-full min-w-0 flex-1 overflow-hidden';
+          const inner = document.createElement('div');
+          inner.className = 'flex flex-col gap-2';
+          const mine = photos.filter((_, idx) => idx % n === i);
+          // Repeat until the column is taller than the screen, then double for the seamless loop.
+          let list = mine;
+          while (list.length && list.length < 6) list = list.concat(mine);
+          for (const src of list.concat(list)) {
+            const img = document.createElement('img');
+            img.src = src;
+            img.alt = '';
+            img.loading = 'lazy';
+            img.decoding = 'async';
+            img.className = 'w-full object-cover';
+            inner.appendChild(img);
+          }
+          col.appendChild(inner);
+          grid.appendChild(col);
+          return col;
+        });
+        cols.forEach((col, i) => { col.scrollTop = i * 150; });
+      }
+      build();
+      let lastW = innerWidth;
+      addEventListener('resize', () => {
+        // Phones fire resize when the URL bar hides; only rebuild on a width change.
+        if (Math.abs(innerWidth - lastW) < 50) return;
+        lastW = innerWidth;
+        build();
+      });
 
       let lastInteraction = 0;
       let pendingDelta = 0;

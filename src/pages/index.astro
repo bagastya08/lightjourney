@@ -38,7 +38,7 @@ const label = 'text-xs font-medium uppercase tracking-[0.2em] text-neutral-500';
     <HeroBackground images={heroImages} video={heroVideo} />
     <div class="relative mx-auto w-full max-w-7xl">
       <div class="flex flex-wrap justify-between gap-2 text-xs font-medium uppercase tracking-[0.2em] text-neutral-600 dark:text-white/70">
-        {settings.tags.map((tag: string) => <span>[ {tag} ]</span>)}
+        {settings.tags.map((tag: string) => <span><span class="text-accent">[</span> {tag} <span class="text-accent">]</span></span>)}
       </div>
       <h1 class="mt-6">
         <img src="/logo-home.svg" alt="LightJourney" class="w-56 invert sm:w-80 dark:invert-0" />
@@ -55,12 +55,12 @@ const label = 'text-xs font-medium uppercase tracking-[0.2em] text-neutral-500';
 
   <!-- Selected Works: one full-width banner per category -->
   <section class="mt-20">
-    <p class={label}>[ Works ]</p>
-    <h2 class="mt-2 font-bold tracking-tight text-5xl leading-none sm:text-7xl">Selected <em>Works.</em></h2>
+    <p class={label}><span class="text-accent">[</span> Works <span class="text-accent">]</span></p>
+    <h2 class="mt-2 font-bold tracking-tight text-5xl leading-none sm:text-7xl">Selected <em class="text-accent">Works.</em></h2>
     {works.length > 0 ? (
       <div class="mt-10 space-y-6">
         {works.map((w: any, i: number) => (
-          <a href={`/gallery?category=${w.key}`} class="group relative block aspect-[4/5] overflow-hidden sm:aspect-[16/9]">
+          <a href={`/works?category=${w.key}`} class="group relative block aspect-[4/5] overflow-hidden sm:aspect-[16/9]">
             <img src={w.cover} alt={w.label} loading={i === 0 ? 'eager' : 'lazy'} class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
             <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent"></div>
             <div class="absolute inset-x-0 bottom-0 flex flex-wrap items-end justify-between gap-4 p-6 text-white sm:p-10">
@@ -68,7 +68,7 @@ const label = 'text-xs font-medium uppercase tracking-[0.2em] text-neutral-500';
                 <p class="text-xs font-medium uppercase tracking-[0.2em] text-white/70">[ {pad(i + 1)} ] · {w.count} foto</p>
                 <h3 class="mt-2 font-bold tracking-tight text-4xl leading-none sm:text-6xl">{w.label}</h3>
               </div>
-              <span class="border border-white/40 px-5 py-2 text-xs font-semibold uppercase tracking-widest backdrop-blur group-hover:bg-white group-hover:text-black">Lihat project →</span>
+              <span class="border border-white/40 px-5 py-2 text-xs font-semibold uppercase tracking-widest backdrop-blur group-hover:border-accent group-hover:bg-accent group-hover:text-white">Lihat project →</span>
             </div>
           </a>
         ))}
@@ -82,9 +82,9 @@ const label = 'text-xs font-medium uppercase tracking-[0.2em] text-neutral-500';
 
   <!-- About: Bagastya -->
   <section class="mt-28 border-t border-black/10 pt-16 dark:border-white/10">
-    <p class={label}>[ About ]</p>
+    <p class={label}><span class="text-accent">[</span> About <span class="text-accent">]</span></p>
     <h2 class="mt-4 max-w-4xl font-bold tracking-tight text-5xl leading-[0.95] sm:text-7xl">
-      Crafted with <em>clarity.</em><br />Built on <em>trust.</em>
+      Crafted with <em class="text-accent">clarity.</em><br />Built on <em class="text-accent">trust.</em>
     </h2>
     <div class="mt-12 grid gap-10 sm:grid-cols-[1fr_1.4fr]">
       <p class="text-sm uppercase tracking-[0.2em] text-neutral-500">LightJourney — visual yang terasa, bukan cuma terlihat.</p>
@@ -106,7 +106,7 @@ const label = 'text-xs font-medium uppercase tracking-[0.2em] text-neutral-500';
     </div>
 
     <div class="mt-16 grid gap-10 sm:grid-cols-[1fr_1.4fr]">
-      <h3 class="font-bold tracking-tight text-4xl leading-none sm:text-5xl">Perjalanan di balik <em>lensa.</em></h3>
+      <h3 class="font-bold tracking-tight text-4xl leading-none sm:text-5xl">Perjalanan di balik <em class="text-accent">lensa.</em></h3>
       <div class="space-y-5 leading-relaxed text-neutral-700 dark:text-white/75">
         <p>{settings.name} memulai perjalanan sebagai fotografer dan videografer dari momen-momen kecil di sekitar — lalu berkembang ke wedding, event, produk, hingga food & beverage.</p>
         <p>Dari situ lahir <span class="text-white">“LightJourney”</span> — nama yang terinspirasi dari ide bahwa setiap karya adalah perjalanan cahaya: menangkap momen dan mengubahnya jadi cerita.</p>
@@ -124,12 +124,12 @@ const label = 'text-xs font-medium uppercase tracking-[0.2em] text-neutral-500';
   <!-- CTA -->
   <section class="mt-28 border border-white/10 bg-white/[0.04] px-6 py-16 text-center backdrop-blur-xl sm:px-12 sm:py-24">
     <h2 class="mx-auto max-w-3xl font-bold tracking-tight text-5xl leading-[0.95] sm:text-7xl">
-      We bring visions to <em>life.</em><br />Let’s create <em>together.</em>
+      We bring visions to <em class="text-accent">life.</em><br />Let’s create <em class="text-accent">together.</em>
     </h2>
     <p class="mx-auto mt-6 max-w-md text-neutral-400">Bangun visual yang lebih kuat untuk momen dan brand kamu. Konsultasi gratis lewat WhatsApp.</p>
     <div class="mt-10 flex flex-wrap justify-center gap-3">
-      <a href={waLink} target="_blank" rel="noopener" class="bg-white px-7 py-3 text-sm font-semibold uppercase tracking-widest text-black hover:opacity-90">Free Consultation</a>
-      <a href="/gallery" class="border border-white/30 px-7 py-3 text-sm font-semibold uppercase tracking-widest hover:bg-white/10">Lihat semua karya</a>
+      <a href={waLink} target="_blank" rel="noopener" class="bg-accent px-7 py-3 text-sm font-semibold uppercase tracking-widest text-white hover:opacity-90">Free Consultation</a>
+      <a href="/works" class="border border-white/30 px-7 py-3 text-sm font-semibold uppercase tracking-widest hover:bg-white/10">Lihat semua karya</a>
     </div>
   </section>
 </Layout>

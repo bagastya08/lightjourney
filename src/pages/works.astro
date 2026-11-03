@@ -1,0 +1,72 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getCategories, getProjects } from '../lib/content';
+import { youtubeThumb } from '../lib/video';
+
+const groups = await getCategories();
+const projects = (await getProjects()).filter(
+  (p: any) => (p.category === 'Foto' && p.imageUrls.length) || (p.category === 'Video' && (p.videoFileUrl || p.videoUrl))
+);
+// Filter tabs: categories that have photo work, plus Video.
+const tabs = [
+  ...groups.filter((g: any) => projects.some((p: any) => p.category === 'Foto' && p.groupId === g._id)).map((g: any) => ({ key: g._id, label: g.title })),
+  ...(projects.some((p: any) => p.category === 'Video') ? [{ key: 'video', label: 'Video' }] : [])
+];
+const tab = (p: any) => (p.category === 'Video' ? 'video' : p.groupId);
+---
+
+<Layout title="Works — LightJourney">
+  <p class="text-xs font-medium uppercase tracking-[0.2em] text-neutral-500"><span class="text-accent">[</span> Works <span class="text-accent">]</span></p>
+  <h1 class="mt-2 text-5xl font-bold leading-none tracking-tight sm:text-7xl">Selected Works<span class="text-accent">.</span></h1>
+  <div class="mt-4 flex flex-wrap items-end justify-between gap-4">
+    <p class="max-w-xl text-neutral-600 dark:text-neutral-400">Foto dan video dari berbagai project. Pilih kategori, lalu buka project untuk melihat semua karyanya.</p>
+    <a href="/gallery/wall" class="text-xs font-semibold uppercase tracking-[0.2em] hover:text-accent">Wall view →</a>
+  </div>
+
+  <!-- One row; scrolls sideways on phones instead of wrapping -->
+  <div class="-mx-4 mt-10 flex gap-6 overflow-x-auto whitespace-nowrap border-b border-black/10 px-4 text-xs font-semibold uppercase tracking-[0.2em] [scrollbar-width:none] dark:border-white/10">
+    <button data-tab="" class="tab-btn -mb-px border-b-2 border-transparent pb-3 text-neutral-500 hover:text-accent aria-pressed:border-accent aria-pressed:text-neutral-900 dark:aria-pressed:text-white" aria-pressed="true">All</button>
+    {tabs.map((t) => <button data-tab={t.key} class="tab-btn -mb-px border-b-2 border-transparent pb-3 text-neutral-500 hover:text-accent aria-pressed:border-accent aria-pressed:text-neutral-900 dark:aria-pressed:text-white" aria-pressed="false">{t.label}</button>)}
+  </div>
+
+  {projects.length > 0 ? (
+    <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-12 sm:grid-cols-2">
+      {projects.map((p: any, i: number) => {
+        const cover = p.category === 'Foto' ? p.imageUrls[0].url : p.videoUrl && !p.videoFileUrl ? youtubeThumb(p.videoUrl) : null;
+        return (
+          <a href={`/works/${p._id}`} data-tab={tab(p)} class="work-card group block">
+            <div class="relative aspect-[4/3] overflow-hidden bg-neutral-900">
+              {cover ? (
+                <img src={cover} alt={p.title} loading={i < 2 ? 'eager' : 'lazy'} class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
+              ) : p.videoFileUrl ? (
+                <video src={`${p.videoFileUrl}#t=0.5`} muted playsinline preload="metadata" class="h-full w-full object-cover"></video>
+              ) : null}
+              {p.category === 'Video' && <span class="absolute left-4 top-4 bg-accent px-2 py-1 text-[10px] font-semibold uppercase tracking-widest text-white">Video</span>}
+            </div>
+            <div class="mt-4 flex items-baseline justify-between gap-4">
+              <h2 class="text-xl font-bold tracking-tight">{p.title}</h2>
+              <span class="shrink-0 text-xs font-semibold uppercase tracking-[0.2em] text-neutral-500 transition-colors group-hover:text-accent">View project →</span>
+            </div>
+            <p class="mt-1 text-sm text-neutral-500">{p.category === 'Video' ? 'Video' : p.groupTitle}{p.client && ` · ${p.client}`}</p>
+          </a>
+        );
+      })}
+    </div>
+  ) : (
+    <p class="mt-16 border border-dashed border-black/10 p-10 text-center text-neutral-500 dark:border-white/10">
+      Belum ada karya. Tambahkan lewat <a href="/admin/content" class="underline">/admin/content</a>.
+    </p>
+  )}
+
+  <script is:inline>
+    function applyTab(key) {
+      document.querySelectorAll('.tab-btn').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.tab === key)));
+      document.querySelectorAll('.work-card').forEach((c) => (c.style.display = !key || c.dataset.tab === key ? '' : 'none'));
+    }
+    document.querySelectorAll('.tab-btn').forEach((b) => b.addEventListener('click', () => {
+      applyTab(b.dataset.tab);
+      history.replaceState(null, '', b.dataset.tab ? `?category=${b.dataset.tab}` : location.pathname);
+    }));
+    applyTab(new URLSearchParams(location.search).get('category') || '');
+  </script>
+</Layout>

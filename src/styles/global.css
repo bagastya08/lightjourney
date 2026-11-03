@@ -5,11 +5,12 @@
 @theme {
   /* Body: Helvetica like the reference studio site, not the iPhone system font. */
   --font-sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  /* Display headings: free stand-in for Editor's Note (paid font). */
-  --font-bold tracking-tight: "Instrument Serif", "Times New Roman", serif;
+  /* Brand orange (logo), for small accents only */
+  --color-accent: #e8650a;
 }
 
 html {
+  overflow-x: clip; /* full-bleed hero (w-screen) + scrollbar caused a sideways scroll */
   scroll-behavior: smooth;
 }
 
@@ -28,12 +29,8 @@ body {
   color: #f2f2f3;
 }
 
-::selection {
-  background: #111113;
-  color: #fff;
-}
-
+::selection,
 .dark ::selection {
-  background: #f2f2f3;
-  color: #111113;
+  background: #e8650a;
+  color: #fff;
 }

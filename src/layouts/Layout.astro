@@ -23,9 +23,6 @@ const isAdmin = isValidSession(Astro.cookies.get(ADMIN_COOKIE)?.value);
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" href="/favicon.svg" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap" />
     <title>{title}</title>
     <meta name="description" content={description} />
     <script is:inline>
@@ -46,11 +43,9 @@ const isAdmin = isValidSession(Astro.cookies.get(ADMIN_COOKIE)?.value);
           <img src="/logo.svg" alt={settings.name} class="h-8 w-auto invert dark:invert-0" />
         </a>
         <div class="hidden items-center gap-1 sm:flex">
-          <a href="/" class="px-4 py-2 text-sm font-medium hover:bg-black/5 dark:hover:bg-white/10">Home</a>
-          <a href="/gallery" class="px-4 py-2 text-sm font-medium hover:bg-black/5 dark:hover:bg-white/10">Gallery</a>
-          <a href="/videos" class="px-4 py-2 text-sm font-medium hover:bg-black/5 dark:hover:bg-white/10">Videos</a>
-          <a href="/booking" class="px-4 py-2 text-sm font-medium hover:bg-black/5 dark:hover:bg-white/10">Booking</a>
-          <a href="/foto" class="px-4 py-2 text-sm font-medium hover:bg-black/5 dark:hover:bg-white/10">Project</a>
+          <a href="/" class="px-4 py-2 text-sm font-medium hover:text-accent">Home</a>
+          <a href="/works" class="px-4 py-2 text-sm font-medium hover:text-accent">Works</a>
+          <a href="/booking" class="px-4 py-2 text-sm font-medium hover:text-accent">Booking</a>
         </div>
         <div class="flex items-center gap-2">
           {isAdmin && <a href="/admin" class="border border-black/10 px-3 py-2 text-sm font-semibold hover:bg-black/5 dark:border-white/15 dark:hover:bg-white/10">Admin</a>}

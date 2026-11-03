@@ -6,24 +6,31 @@ import BookedCalendar from '../components/BookedCalendar.astro';
 import { isValidSession, ADMIN_COOKIE } from '../lib/admin-auth';
 import { formatDateId, SESSION_TYPES, getSettings, normalizeWa, isIsoDate } from '../lib/content';
 
-let busyDates: string[] = [];
+// The access code is the booking's proof token; /proof/[token] does the lookup.
+const code = (Astro.url.searchParams.get('kode') || '').trim().toUpperCase().replace(/[^A-Z0-9]/g, '');
+if (code) return Astro.redirect(`/proof/${code}`);
+
+// Every non-cancelled booking. Untitled ones show their session type, never the
+// client's name; photos stay behind the access code. Never select token/whatsapp here.
+let projects: { id: string; title: string; preferred_date: string }[] = [];
 try {
-  const supabase = supabaseAdmin();
-  const { data } = await supabase
+  const { data } = await supabaseAdmin()
     .from('bookings')
-    .select('preferred_date')
+    .select('id, title, session_type, preferred_date')
     .neq('status', 'cancelled')
-    .gte('preferred_date', new Date().toISOString().slice(0, 10));
-  busyDates = (data ?? []).map((b) => b.preferred_date);
+    .order('preferred_date', { ascending: false });
+  projects = (data ?? []).map((b) => ({ ...b, title: b.title || SESSION_TYPES[b.session_type] || 'Project' }));
 } catch {
   // Supabase belum dikonfigurasi — kalender jalan tanpa data booked.
 }
+const busyDates = projects.map((p) => p.preferred_date);
 
 const selected = Astro.url.searchParams.get('tanggal');
 const today = new Date().toLocaleDateString('sv-SE');
 const isValidDate = isIsoDate(selected);
 const isPast = isValidDate && selected! < today;
 const isBusy = isValidDate && busyDates.includes(selected!);
+const shown = isValidDate ? projects.filter((p) => p.preferred_date === selected) : projects;
 
 const settings = await getSettings();
 const ownerWa = normalizeWa(settings.whatsapp);
@@ -34,8 +41,9 @@ const isAdmin = isValidSession(Astro.cookies.get(ADMIN_COOKIE)?.value);
 ---
 
 <Layout title="Booking — Bagastya">
-  <h1 class="font-bold tracking-tight text-5xl leading-none sm:text-6xl">Book a Session</h1>
-  <p class="mt-2 text-neutral-600 dark:text-neutral-400">Klik tanggal di kalender, lalu tekan Booking di sini. Konfirmasi lewat WhatsApp.</p>
+  <p class="text-xs font-medium uppercase tracking-[0.2em] text-neutral-500"><span class="text-accent">[</span> Booking & Project <span class="text-accent">]</span></p>
+  <h1 class="mt-2 font-bold tracking-tight text-5xl leading-none sm:text-6xl">Book a Session</h1>
+  <p class="mt-2 text-neutral-600 dark:text-neutral-400">Klik tanggal untuk booking atau melihat project. Untuk melihat dan memilih foto, masukkan kode akses yang dikirim lewat WhatsApp.</p>
 
   <BookedCalendar dates={busyDates} />
 
@@ -46,6 +54,7 @@ const isAdmin = isValidSession(Astro.cookies.get(ADMIN_COOKIE)?.value);
       <>
         <p class="text-lg font-semibold capitalize">{formatDateId(selected!)}</p>
         {isBusy && <p class="mt-1 text-sm text-neutral-500">Sudah ada jadwal di tanggal ini — tetap bisa ajukan, nanti dikonfirmasi lewat WhatsApp.</p>}
+        <a href="/booking" class="mt-1 inline-block text-sm text-neutral-500 hover:text-accent">Lihat semua project</a>
         {isAdmin ? (
           <a href={`/admin/bookings?tanggal=${selected}#panel`} class="mt-4 inline-block bg-neutral-900 px-6 py-2.5 text-sm font-semibold text-white hover:opacity-90 dark:bg-white dark:text-black">+ Tambah project tanggal ini</a>
         ) : isPast ? (
@@ -95,6 +104,35 @@ const isAdmin = isValidSession(Astro.cookies.get(ADMIN_COOKIE)?.value);
         )}
       </>
     )}
+  </section>
+
+  <!-- Projects (was /foto): photos open with the access code -->
+  <section class="mt-12">
+    <p class="text-xs font-medium uppercase tracking-[0.2em] text-neutral-500"><span class="text-accent">[</span> Project{isValidDate ? ' di tanggal ini' : ''} <span class="text-accent">]</span></p>
+    <div class="mt-4 space-y-3">
+      {shown.map((p) => (
+        <details open={isValidDate} class="group border border-black/10 p-4 dark:border-white/10">
+          <summary class="flex cursor-pointer list-none flex-wrap items-center justify-between gap-2">
+            <div>
+              <p class="font-semibold">{p.title}</p>
+              <p class="text-sm capitalize text-neutral-500">{formatDateId(p.preferred_date)}</p>
+            </div>
+            <span class="border border-black/10 px-4 py-1.5 text-sm font-medium group-open:border-accent group-open:bg-accent group-open:text-white dark:border-white/15">Pilih Foto</span>
+          </summary>
+          <form method="get" action="/booking" class="mt-4 flex gap-2">
+            <input required name="kode" autocomplete="off" placeholder="Kode akses" aria-label={`Kode akses ${p.title}`} class="min-w-0 flex-1 border border-black/10 bg-transparent px-4 py-2.5 text-center font-mono uppercase tracking-widest outline-none focus:border-accent dark:border-white/15" />
+            <button type="submit" class="bg-neutral-900 px-6 py-2.5 text-sm font-semibold text-white hover:opacity-90 dark:bg-white dark:text-black">Buka</button>
+          </form>
+        </details>
+      ))}
+      {shown.length === 0 && <p class="text-sm text-neutral-500">{isValidDate ? 'Belum ada project di tanggal ini.' : 'Belum ada project.'}</p>}
+      {!isValidDate && (
+        <form method="get" action="/booking" class="flex max-w-md gap-2 pt-4">
+          <input required name="kode" autocomplete="off" placeholder="Punya kode akses?" aria-label="Kode akses" class="min-w-0 flex-1 border border-black/10 bg-transparent px-4 py-2.5 text-center font-mono uppercase tracking-widest outline-none focus:border-accent dark:border-white/15" />
+          <button type="submit" class="bg-neutral-900 px-6 py-2.5 text-sm font-semibold text-white hover:opacity-90 dark:bg-white dark:text-black">Buka</button>
+        </form>
+      )}
+    </div>
   </section>
 
   <script is:inline define:vars={{ ownerWa, dateLabel, SESSION_TYPES }}>

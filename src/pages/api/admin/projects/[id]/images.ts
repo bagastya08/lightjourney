@@ -28,3 +28,16 @@ export const POST: APIRoute = async ({ params, request }) => {
     return new Response(JSON.stringify({ error: message }), { status: 500 });
   }
 };
+
+// Remove one photo from the project (the asset stays in Sanity's media library).
+export const DELETE: APIRoute = async ({ params, url }) => {
+  const key = url.searchParams.get('key');
+  if (!key) return new Response(JSON.stringify({ error: 'key wajib' }), { status: 400 });
+  try {
+    await sanityWrite().patch(params.id!).unset([`images[_key=="${key.replace(/"/g, '')}"]`]).commit();
+    return new Response(JSON.stringify({ ok: true }), { status: 200 });
+  } catch (err) {
+    const message = err instanceof Error ? err.message : 'Gagal menghapus foto.';
+    return new Response(JSON.stringify({ error: message }), { status: 500 });
+  }
+};
