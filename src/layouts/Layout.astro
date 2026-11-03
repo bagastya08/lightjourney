@@ -1,7 +1,6 @@
 ---
 import '../styles/global.css';
 import { getSettings, whatsappLink } from '../lib/content';
-import { isValidSession, ADMIN_COOKIE } from '../lib/admin-auth';
 
 interface Props {
   title?: string;
@@ -13,8 +12,6 @@ interface Props {
 const { forceDark = false, title = 'LightJourney — Photographer & Videographer', description = 'Freelance photographer & videographer. Portrait, wedding, event, and product photography plus videography.' } = Astro.props;
 const settings = await getSettings();
 const waLink = whatsappLink(settings.whatsapp, settings.whatsappMessage);
-// Logged-in admin keeps a way back to the panel from every public page.
-const isAdmin = isValidSession(Astro.cookies.get(ADMIN_COOKIE)?.value);
 ---
 
 <!doctype html>
@@ -48,7 +45,6 @@ const isAdmin = isValidSession(Astro.cookies.get(ADMIN_COOKIE)?.value);
           <a href="/booking" class="px-4 py-2 text-sm font-medium hover:text-accent">Booking</a>
         </div>
         <div class="flex items-center gap-2">
-          {isAdmin && <a href="/admin" class="border border-black/10 px-3 py-2 text-sm font-semibold hover:bg-black/5 dark:border-white/15 dark:hover:bg-white/10">Admin</a>}
           <a href={waLink} target="_blank" rel="noopener" class="hidden bg-neutral-900 px-4 py-2 text-sm font-semibold text-white hover:opacity-90 dark:bg-white dark:text-black sm:inline-block">
             Contact
           </a>
