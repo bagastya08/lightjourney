@@ -1,5 +1,5 @@
 ---
-// Two-month calendar. Every day links to `?tanggal=YYYY-MM-DD` (server-rendered,
+// One-month calendar. Every day links to `?tanggal=YYYY-MM-DD` (server-rendered,
 // no JS); the page reads that param and shows its own panel. Booked days get an
 // Apple-Calendar-style filled circle (red light / lime dark), the picked day a ring.
 interface Props {
@@ -30,7 +30,8 @@ function monthGrid(monthOffset: number) {
   return { label, cells };
 }
 
-const months = [monthGrid(offset), monthGrid(offset + 1)];
+// One month at a time so nobody books next month by mistake.
+const months = [monthGrid(offset)];
 const weekdays = ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'];
 const navClass = 'rounded-full px-3 py-1 text-sm font-medium hover:bg-black/5 dark:hover:bg-white/10';
 const keepDate = selected ? `&tanggal=${selected}` : '';
@@ -42,10 +43,10 @@ const keepDate = selected ? `&tanggal=${selected}` : '';
     {offset !== 0 && <a href="?" class={navClass}>Hari ini</a>}
     <a href={`?m=${offset + 1}${keepDate}`} class={navClass} aria-label="Bulan berikutnya">Berikutnya ›</a>
   </div>
-  <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+  <div>
     {months.map((m) => (
       <div class="border border-black/10 p-4 dark:border-white/10">
-        <p class="mb-3 text-center text-sm font-semibold capitalize">{m.label}</p>
+        <p class="mb-4 text-center text-base font-semibold capitalize sm:text-lg">{m.label}</p>
         <div class="grid grid-cols-7 gap-1 text-center text-xs text-neutral-500">
           {weekdays.map((w) => <span>{w}</span>)}
         </div>
@@ -59,7 +60,7 @@ const keepDate = selected ? `&tanggal=${selected}` : '';
                 aria-label={date}
                 aria-current={date === selected ? 'date' : undefined}
                 class:list={[
-                  'mx-auto flex h-9 w-9 items-center justify-center rounded-full text-sm transition-colors',
+                  'mx-auto flex h-9 w-9 items-center justify-center rounded-full text-sm transition-colors sm:h-11 sm:w-11 sm:text-base',
                   booked.has(date)
                     ? 'bg-accent font-semibold text-white hover:opacity-80'
                     : date === today
