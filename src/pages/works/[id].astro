@@ -27,7 +27,7 @@ const isVideo = project.category === 'Video';
   {project.client && <p class="mt-3 text-sm text-neutral-500">Client · {project.client}</p>}
   {project.description && <p class="mt-4 max-w-2xl text-neutral-600 dark:text-neutral-400">{project.description}</p>}
 
-  {isVideo ? (
+  {isVideo && (
     <div class="mt-10 aspect-video bg-black">
       {project.videoFileUrl ? (
         <video src={project.videoFileUrl} autoplay muted loop controls playsinline preload="auto" class="h-full w-full"></video>
@@ -35,7 +35,10 @@ const isVideo = project.category === 'Video';
         <iframe src={`${embedUrl(project.videoUrl)}${embedUrl(project.videoUrl).includes('?') ? '&' : '?'}autoplay=1&mute=1`} title={project.title} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen class="h-full w-full"></iframe>
       )}
     </div>
-  ) : (
+  )}
+
+  {/* Photos: Foto projects, and Video projects that also have stills */}
+  {photos.length > 0 && (
     <div id="masonry" class="mt-8 columns-1 gap-4 sm:columns-2 lg:columns-3">
       {photos.map((item: any) => (
         <button

@@ -37,15 +37,15 @@ const navClass = 'rounded-full px-3 py-1 text-sm font-medium hover:bg-black/5 da
 const keepDate = selected ? `&tanggal=${selected}` : '';
 ---
 
-<div class="mt-8">
+<div id="kalender" class="mt-8 scroll-mt-24">
   <div class="mb-3 flex items-center justify-between">
-    <a href={`?m=${offset - 1}${keepDate}`} class={navClass} aria-label="Bulan sebelumnya">‹ Sebelumnya</a>
+    <a href={`?m=${offset - 1}${keepDate}#kalender`} class={navClass} aria-label="Bulan sebelumnya">‹ Sebelumnya</a>
     {offset !== 0 && <a href="?" class={navClass}>Hari ini</a>}
-    <a href={`?m=${offset + 1}${keepDate}`} class={navClass} aria-label="Bulan berikutnya">Berikutnya ›</a>
+    <a href={`?m=${offset + 1}${keepDate}#kalender`} class={navClass} aria-label="Bulan berikutnya">Berikutnya ›</a>
   </div>
   <div>
     {months.map((m) => (
-      <div class="border border-black/10 p-4 dark:border-white/10">
+      <div class="cal-month border border-black/10 p-4 dark:border-white/10" data-month={m.cells.find(Boolean)!.slice(0, 7)}>
         <p class="mb-4 text-center text-base font-semibold capitalize sm:text-lg">{m.label}</p>
         <div class="grid grid-cols-7 gap-1 text-center text-xs text-neutral-500">
           {weekdays.map((w) => <span>{w}</span>)}
@@ -81,3 +81,18 @@ const keepDate = selected ? `&tanggal=${selected}` : '';
     <span class="inline-block h-3 w-3 rounded-full bg-[#FF3B30] dark:bg-accent"></span> Sudah ada jadwal · klik tanggal untuk detail
   </p>
 </div>
+
+<script is:inline>
+  // Slide the month left/right when navigating between months (View Transitions).
+  (() => {
+    const cur = document.querySelector('.cal-month')?.dataset.month;
+    addEventListener('pageswap', () => { try { sessionStorage.setItem('calMonth', cur || ''); } catch {} });
+    addEventListener('pagereveal', (e) => {
+      if (!e.viewTransition) return;
+      let prev = '';
+      try { prev = sessionStorage.getItem('calMonth') || ''; } catch {}
+      document.documentElement.dataset.calDir = !prev || !cur || prev === cur ? 'same' : cur > prev ? 'next' : 'prev';
+      e.viewTransition.finished.finally(() => delete document.documentElement.dataset.calDir);
+    });
+  })();
+</script>

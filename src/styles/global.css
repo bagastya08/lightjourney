@@ -9,6 +9,37 @@
   --color-accent: #6b6b6b;
 }
 
+/* Same-site page changes: only the booking calendar animates (month slide). */
+@view-transition {
+  navigation: auto;
+}
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+}
+.cal-month {
+  view-transition-name: cal-month;
+}
+::view-transition-group(cal-month) {
+  animation: none; /* no fly-in when the page scrolls to the calendar */
+}
+::view-transition-old(cal-month),
+::view-transition-new(cal-month) {
+  animation: none;
+}
+html[data-cal-dir="next"]::view-transition-old(cal-month) { animation: cal-out-left 0.4s ease both; }
+html[data-cal-dir="next"]::view-transition-new(cal-month) { animation: cal-in-right 0.4s ease both; }
+html[data-cal-dir="prev"]::view-transition-old(cal-month) { animation: cal-out-right 0.4s ease both; }
+html[data-cal-dir="prev"]::view-transition-new(cal-month) { animation: cal-in-left 0.4s ease both; }
+@keyframes cal-out-left { to { transform: translateX(-60px); opacity: 0; } }
+@keyframes cal-out-right { to { transform: translateX(60px); opacity: 0; } }
+@keyframes cal-in-right { from { transform: translateX(60px); opacity: 0; } }
+@keyframes cal-in-left { from { transform: translateX(-60px); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) {
+  html[data-cal-dir]::view-transition-old(cal-month),
+  html[data-cal-dir]::view-transition-new(cal-month) { animation: none; }
+}
+
 html {
   overflow-x: clip; /* full-bleed hero (w-screen) + scrollbar caused a sideways scroll */
   scroll-behavior: smooth;

@@ -115,10 +115,10 @@ const isAdmin = isValidSession(Astro.cookies.get(ADMIN_COOKIE)?.value);
       {shown.map((p) => (
         <details open={isValidDate} class="group border border-black/10 p-4 dark:border-white/10">
           <summary class="flex cursor-pointer list-none flex-wrap items-center justify-between gap-2">
-            <div>
+            <a href={`/booking?tanggal=${p.preferred_date}#kalender`} class="group/p block hover:text-accent">
               <p class="font-semibold">{p.title}</p>
-              <p class="text-sm capitalize text-neutral-500">{formatDateId(p.preferred_date)}</p>
-            </div>
+              <p class="text-sm capitalize text-neutral-500">{formatDateId(p.preferred_date)} <span class="opacity-0 transition-opacity group-hover/p:opacity-100">· lihat di kalender →</span></p>
+            </a>
             <span class="border border-black/10 px-4 py-1.5 text-sm font-medium group-open:border-accent group-open:bg-accent group-open:text-white dark:border-white/15">Pilih Foto</span>
           </summary>
           <form method="get" action="/booking" class="mt-4 flex gap-2">
