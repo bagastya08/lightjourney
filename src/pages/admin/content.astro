@@ -109,7 +109,7 @@ try {
           {p.thumb && <img src={p.thumb} alt={p.title} class="h-16 w-16 object-cover" />}
           <div class="flex-1">
             <p class="font-medium">{p.title}{p.client ? ` · ${p.client}` : ''}</p>
-            <p class="text-sm text-neutral-500">{p.groupTitle} · {p.category} · {p.imageCount} foto{p.category === 'Video' && (p.videoFileUrl || p.videoUrl) ? ' · video terpasang' : ''}</p>
+            <p class="text-sm text-neutral-500">{p.groupTitle} · {p.category} · {p.imageCount} foto{(p.videoFileUrl || p.videoUrl) ? ' · video terpasang' : ''}</p>
           </div>
           <button class="delete-project-btn bg-red-600/90 px-3 py-1.5 text-xs font-semibold text-white">Hapus</button>
         </div>
@@ -151,7 +151,8 @@ try {
           </form>
         </details>
 
-        {p.category === 'Video' && (
+        {/* Any project can carry a video, photo projects too */}
+        {(
           <details class="mt-2">
             <summary class="cursor-pointer text-sm text-neutral-500">+ Pasang video</summary>
             <form class="add-video-form mt-2 flex flex-wrap items-center gap-2" data-id={p._id}>

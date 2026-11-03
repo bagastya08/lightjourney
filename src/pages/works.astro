@@ -5,7 +5,7 @@ import { youtubeThumb } from '../lib/video';
 
 const groups = await getCategories();
 const projects = (await getProjects()).filter(
-  (p: any) => (p.category === 'Foto' && p.imageUrls.length) || (p.category === 'Video' && (p.videoFileUrl || p.videoUrl))
+  (p: any) => p.imageUrls.length || p.videoFileUrl || p.videoUrl
 );
 // Filter tabs: every category from admin; videos sit in their own category.
 const tabs = groups.map((g: any) => ({ key: g._id, label: g.title }));
@@ -64,7 +64,7 @@ const cats = groups
   {projects.length > 0 ? (
     <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-12 sm:grid-cols-2">
       {projects.map((p: any, i: number) => {
-        const cover = p.category === 'Foto' ? p.imageUrls[0].url : p.videoUrl && !p.videoFileUrl ? youtubeThumb(p.videoUrl) : null;
+        const cover = p.imageUrls[0]?.url || (p.videoUrl && !p.videoFileUrl ? youtubeThumb(p.videoUrl) : null);
         return (
           <a href={`/works/${p._id}`} data-tab={tab(p)} class="work-card group block" style={initial === tab(p) ? undefined : 'display:none'}>
             <div class="relative aspect-[4/3] overflow-hidden bg-neutral-900">
@@ -78,7 +78,7 @@ const cats = groups
               <h2 class="min-w-0 text-xl font-bold tracking-tight">{p.title}</h2>
               <span class="shrink-0 text-xs font-semibold uppercase tracking-[0.2em] text-neutral-500 transition-colors group-hover:text-accent">View project →</span>
             </div>
-            <p class="mt-1 text-sm text-neutral-500">{p.groupTitle}{p.category === 'Video' && ' · Video'}{p.client && ` · ${p.client}`}</p>
+            <p class="mt-1 text-sm text-neutral-500">{p.groupTitle}{(p.videoFileUrl || p.videoUrl) && ' · Video'}{p.client && ` · ${p.client}`}</p>
           </a>
         );
       })}

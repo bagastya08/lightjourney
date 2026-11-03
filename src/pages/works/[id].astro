@@ -17,7 +17,8 @@ const photos = project.imageUrls.map((img: any) => ({
   groupTitle: project.groupTitle,
   description: project.description || ''
 }));
-const isVideo = project.category === 'Video';
+// Any project may have a video (shown above its photos).
+const isVideo = !!(project.videoFileUrl || project.videoUrl);
 ---
 
 <Layout title={`${project.title} — LightJourney`}>
