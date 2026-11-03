@@ -29,7 +29,7 @@ const categories = groups.filter((g: any) => projects.some((p: any) => p.groupId
       <h1 class="font-serif text-5xl leading-none sm:text-6xl">Gallery</h1>
       <p class="mt-2 text-neutral-600 dark:text-neutral-400">Kumpulan hasil jepretan dari berbagai project. Klik foto buat lihat detail acaranya.</p>
     </div>
-    <a href="/gallery/wall" class="rounded-lg border border-black/10 px-4 py-2 text-sm font-medium hover:bg-black/5 dark:border-white/10 dark:hover:bg-white/10">
+    <a href="/gallery/wall" class="border border-black/10 px-4 py-2 text-sm font-medium hover:bg-black/5 dark:border-white/10 dark:hover:bg-white/10">
       Wall View →
     </a>
   </div>
@@ -38,7 +38,7 @@ const categories = groups.filter((g: any) => projects.some((p: any) => p.groupId
     {categories.map((cat: any) => (
       <button
         data-category={cat._id}
-        class="filter-btn rounded-full border border-black/10 px-4 py-1.5 text-sm font-medium hover:bg-black/5 dark:border-white/10 dark:hover:bg-white/10 aria-pressed:bg-neutral-900 aria-pressed:text-white dark:aria-pressed:bg-white dark:aria-pressed:text-black"
+        class="filter-btn border border-black/10 px-4 py-1.5 text-sm font-medium hover:bg-black/5 dark:border-white/10 dark:hover:bg-white/10 aria-pressed:bg-neutral-900 aria-pressed:text-white dark:aria-pressed:bg-white dark:aria-pressed:text-black"
         aria-pressed="false"
       >
         {cat.title}
@@ -51,7 +51,7 @@ const categories = groups.filter((g: any) => projects.some((p: any) => p.groupId
       {photos.map((item: any) => (
         <button
           type="button"
-          class="photo-btn group relative mb-4 block w-full break-inside-avoid overflow-hidden rounded-2xl text-left shadow-sm transition-shadow duration-300 hover:shadow-2xl"
+          class="photo-btn group relative mb-4 block w-full break-inside-avoid overflow-hidden text-left shadow-sm transition-shadow duration-300 hover:shadow-2xl"
           data-category={item.groupId}
           data-title={item.title}
           data-client={item.client}
@@ -69,23 +69,23 @@ const categories = groups.filter((g: any) => projects.some((p: any) => p.groupId
       ))}
     </div>
   ) : (
-    <p class="mt-16 rounded-2xl border border-dashed border-black/10 p-10 text-center text-neutral-500 dark:border-white/10">
+    <p class="mt-16 border border-dashed border-black/10 p-10 text-center text-neutral-500 dark:border-white/10">
       Belum ada foto. Tambahkan lewat <a href="/admin/content" class="underline">/admin/content</a>.
     </p>
   )}
 
   <div id="lightbox" class="fixed inset-0 z-[60] hidden items-center justify-center bg-black/90 p-4">
-    <button id="lightbox-close" class="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white hover:bg-white/20">✕</button>
-    <div class="max-h-full w-full max-w-3xl overflow-y-auto rounded-2xl bg-white dark:bg-neutral-900">
+    <button id="lightbox-close" class="absolute right-4 top-4 flex h-10 w-10 items-center justify-center bg-white/10 text-white hover:bg-white/20">✕</button>
+    <div class="max-h-full w-full max-w-3xl overflow-y-auto bg-white dark:bg-neutral-900">
       <img id="lightbox-img" src="" alt="" class="max-h-[70vh] w-full object-contain bg-black" />
       <div class="p-5">
         <p id="lightbox-group" class="text-xs font-medium uppercase tracking-wide text-neutral-500"></p>
         <div class="mt-1 flex flex-wrap items-center gap-2">
           <h3 id="lightbox-title" class="text-xl font-bold"></h3>
-          <span id="lightbox-client" class="hidden rounded-full bg-black/5 px-3 py-1 text-xs font-medium dark:bg-white/10"></span>
+          <span id="lightbox-client" class="hidden bg-black/5 px-3 py-1 text-xs font-medium dark:bg-white/10"></span>
         </div>
         <p id="lightbox-description" class="mt-2 text-sm text-neutral-600 dark:text-neutral-400"></p>
-        <button id="lightbox-download" class="mt-4 inline-flex items-center gap-2 rounded-full bg-neutral-900 px-5 py-2.5 text-sm font-semibold text-white hover:opacity-90 dark:bg-white dark:text-black">
+        <button id="lightbox-download" class="mt-4 inline-flex items-center gap-2 bg-neutral-900 px-5 py-2.5 text-sm font-semibold text-white hover:opacity-90 dark:bg-white dark:text-black">
           Download Foto
         </button>
       </div>

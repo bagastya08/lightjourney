@@ -37,20 +37,20 @@ try {
       </p>
       <p class="mt-1 text-sm text-neutral-500"><span id="count">{selectedIds.length}</span> / {project.quota} terpilih</p>
       {project.drive_url && (
-        <a href={project.drive_url} target="_blank" rel="noopener" class="mt-3 inline-block rounded-full border border-black/10 px-4 py-2 text-sm font-medium hover:bg-black/5 dark:border-white/15 dark:hover:bg-white/10">
+        <a href={project.drive_url} target="_blank" rel="noopener" class="mt-3 inline-block border border-black/10 px-4 py-2 text-sm font-medium hover:bg-black/5 dark:border-white/15 dark:hover:bg-white/10">
           Download semua di Google Drive
         </a>
       )}
 
       <div id="grid" class="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3" data-quota={project.quota}>
         {photosWithUrl.map((p) => (
-          <label class="photo-card group relative block cursor-pointer overflow-hidden rounded-xl border-2 border-transparent">
+          <label class="photo-card group relative block cursor-pointer overflow-hidden border-2 border-transparent">
             <input type="checkbox" class="peer sr-only" value={p.id} checked={selectedIds.includes(p.id)} />
             {p.url && <img src={p.url} alt={p.filename} class="aspect-square w-full object-cover" />}
             <span class="pointer-events-none absolute inset-0 ring-4 ring-transparent peer-checked:ring-neutral-900 dark:peer-checked:ring-white"></span>
-            <span class="pointer-events-none absolute right-2 top-2 hidden h-6 w-6 items-center justify-center rounded-full bg-neutral-900 text-xs text-white peer-checked:flex dark:bg-white dark:text-black">✓</span>
+            <span class="pointer-events-none absolute right-2 top-2 hidden h-6 w-6 items-center justify-center bg-neutral-900 text-xs text-white peer-checked:flex dark:bg-white dark:text-black">✓</span>
             {p.download && (
-              <a href={p.download} target="_blank" rel="noopener" onclick="event.stopPropagation()" aria-label={`Download ${p.filename}`} class="absolute bottom-2 right-2 rounded-full bg-black/60 px-2.5 py-1 text-xs font-medium text-white backdrop-blur hover:bg-black/80">
+              <a href={p.download} target="_blank" rel="noopener" onclick="event.stopPropagation()" aria-label={`Download ${p.filename}`} class="absolute bottom-2 right-2 bg-black/60 px-2.5 py-1 text-xs font-medium text-white backdrop-blur hover:bg-black/80">
                 Download
               </a>
             )}
@@ -60,7 +60,7 @@ try {
 
       {photosWithUrl.length === 0 && <p class="mt-8 text-neutral-500">Foto belum diupload, cek lagi nanti ya.</p>}
 
-      <button id="submit" class="mt-8 w-full rounded-full bg-neutral-900 px-6 py-3 text-sm font-semibold text-white hover:opacity-90 disabled:opacity-40 dark:bg-white dark:text-black sm:w-auto">
+      <button id="submit" class="mt-8 w-full bg-neutral-900 px-6 py-3 text-sm font-semibold text-white hover:opacity-90 disabled:opacity-40 dark:bg-white dark:text-black sm:w-auto">
         Simpan Pilihan
       </button>
       <p id="status" class="mt-3 text-sm"></p>

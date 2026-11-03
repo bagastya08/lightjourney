@@ -17,7 +17,7 @@ const [main, second, third] = items;
 
 {items.length > 0 && (
   <a href={href} class="board-tile group block">
-    <div class="flex aspect-[4/3] gap-1 overflow-hidden rounded-2xl">
+    <div class="flex aspect-[4/3] gap-1 overflow-hidden">
       <div class="board-img h-full flex-[2] overflow-hidden">
         {main.image && (
           <img src={main.image} alt={main.title} class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />

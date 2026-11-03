@@ -39,7 +39,7 @@ const isAdmin = isValidSession(Astro.cookies.get(ADMIN_COOKIE)?.value);
 
   <BookedCalendar dates={busyDates} />
 
-  <section id="panel" class="mt-8 scroll-mt-24 rounded-2xl border border-black/10 p-5 dark:border-white/10">
+  <section id="panel" class="mt-8 scroll-mt-24 border border-black/10 p-5 dark:border-white/10">
     {!isValidDate ? (
       <p class="text-neutral-500">Pilih tanggal di kalender untuk booking.</p>
     ) : (
@@ -47,48 +47,48 @@ const isAdmin = isValidSession(Astro.cookies.get(ADMIN_COOKIE)?.value);
         <p class="text-lg font-semibold capitalize">{formatDateId(selected!)}</p>
         {isBusy && <p class="mt-1 text-sm text-neutral-500">Sudah ada jadwal di tanggal ini — tetap bisa ajukan, nanti dikonfirmasi lewat WhatsApp.</p>}
         {isAdmin ? (
-          <a href={`/admin/bookings?tanggal=${selected}#panel`} class="mt-4 inline-block rounded-full bg-neutral-900 px-6 py-2.5 text-sm font-semibold text-white hover:opacity-90 dark:bg-white dark:text-black">+ Tambah project tanggal ini</a>
+          <a href={`/admin/bookings?tanggal=${selected}#panel`} class="mt-4 inline-block bg-neutral-900 px-6 py-2.5 text-sm font-semibold text-white hover:opacity-90 dark:bg-white dark:text-black">+ Tambah project tanggal ini</a>
         ) : isPast ? (
           <p class="mt-2 text-sm text-neutral-500">Tanggal ini sudah lewat.</p>
         ) : (
           <details class="group mt-4">
-            <summary class="inline-block cursor-pointer list-none rounded-full bg-neutral-900 px-6 py-2.5 text-sm font-semibold text-white hover:opacity-90 group-open:hidden dark:bg-white dark:text-black">
+            <summary class="inline-block cursor-pointer list-none bg-neutral-900 px-6 py-2.5 text-sm font-semibold text-white hover:opacity-90 group-open:hidden dark:bg-white dark:text-black">
               Booking di sini
             </summary>
   <form id="booking-form" class="grid grid-cols-1 gap-4 sm:grid-cols-2">
     <div class="sm:col-span-1">
       <label class="mb-1 block text-sm font-medium" for="name">Nama</label>
-      <input required id="name" name="name" class="w-full rounded-xl border border-black/10 bg-transparent px-4 py-2.5 outline-none focus:border-neutral-900 dark:border-white/15 dark:focus:border-white" />
+      <input required id="name" name="name" class="w-full border border-black/10 bg-transparent px-4 py-2.5 outline-none focus:border-neutral-900 dark:border-white/15 dark:focus:border-white" />
     </div>
     <div class="sm:col-span-1">
       <label class="mb-1 block text-sm font-medium" for="whatsapp">Nomor WhatsApp</label>
-      <input required id="whatsapp" name="whatsapp" placeholder="628..." class="w-full rounded-xl border border-black/10 bg-transparent px-4 py-2.5 outline-none focus:border-neutral-900 dark:border-white/15 dark:focus:border-white" />
+      <input required id="whatsapp" name="whatsapp" placeholder="628..." class="w-full border border-black/10 bg-transparent px-4 py-2.5 outline-none focus:border-neutral-900 dark:border-white/15 dark:focus:border-white" />
     </div>
     <div class="sm:col-span-2">
       <label class="mb-1 block text-sm font-medium" for="email">Email (opsional)</label>
-      <input id="email" name="email" type="email" class="w-full rounded-xl border border-black/10 bg-transparent px-4 py-2.5 outline-none focus:border-neutral-900 dark:border-white/15 dark:focus:border-white" />
+      <input id="email" name="email" type="email" class="w-full border border-black/10 bg-transparent px-4 py-2.5 outline-none focus:border-neutral-900 dark:border-white/15 dark:focus:border-white" />
     </div>
     <div class="sm:col-span-1">
       <label class="mb-1 block text-sm font-medium" for="session_type">Jenis Sesi</label>
-      <select id="session_type" name="session_type" class="w-full rounded-xl border border-black/10 bg-transparent px-4 py-2.5 outline-none focus:border-neutral-900 dark:border-white/15 dark:focus:border-white">
+      <select id="session_type" name="session_type" class="w-full border border-black/10 bg-transparent px-4 py-2.5 outline-none focus:border-neutral-900 dark:border-white/15 dark:focus:border-white">
         {Object.entries(SESSION_TYPES).map(([value, label]) => <option value={value}>{label}</option>)}
       </select>
     </div>
     <input type="hidden" name="preferred_date" value={selected} />
     <div class="sm:col-span-1">
       <label class="mb-1 block text-sm font-medium" for="preferred_time">Jam (opsional)</label>
-      <input id="preferred_time" name="preferred_time" type="time" class="w-full rounded-xl border border-black/10 bg-transparent px-4 py-2.5 outline-none focus:border-neutral-900 dark:border-white/15 dark:focus:border-white" />
+      <input id="preferred_time" name="preferred_time" type="time" class="w-full border border-black/10 bg-transparent px-4 py-2.5 outline-none focus:border-neutral-900 dark:border-white/15 dark:focus:border-white" />
     </div>
     <div class="sm:col-span-2">
       <label class="mb-1 block text-sm font-medium" for="notes">Catatan</label>
-      <textarea id="notes" name="notes" rows="3" class="w-full rounded-xl border border-black/10 bg-transparent px-4 py-2.5 outline-none focus:border-neutral-900 dark:border-white/15 dark:focus:border-white"></textarea>
+      <textarea id="notes" name="notes" rows="3" class="w-full border border-black/10 bg-transparent px-4 py-2.5 outline-none focus:border-neutral-900 dark:border-white/15 dark:focus:border-white"></textarea>
     </div>
     <div class="sm:col-span-2">
-      <button type="submit" class="w-full rounded-full bg-neutral-900 px-6 py-3 text-sm font-semibold text-white hover:opacity-90 dark:bg-white dark:text-black sm:w-auto">
+      <button type="submit" class="w-full bg-neutral-900 px-6 py-3 text-sm font-semibold text-white hover:opacity-90 dark:bg-white dark:text-black sm:w-auto">
         Kirim Booking
       </button>
       <p id="form-status" class="mt-3 text-sm"></p>
-      <a id="wa-send" target="_blank" rel="noopener" class="mt-3 hidden w-fit rounded-full bg-[#25D366] px-6 py-3 text-sm font-semibold text-black hover:opacity-90">Kirim detail booking ke WhatsApp</a>
+      <a id="wa-send" target="_blank" rel="noopener" class="mt-3 hidden w-fit bg-[#25D366] px-6 py-3 text-sm font-semibold text-black hover:opacity-90">Kirim detail booking ke WhatsApp</a>
     </div>
   </form>
           </details>

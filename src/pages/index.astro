@@ -46,8 +46,8 @@ const label = 'text-xs font-medium uppercase tracking-[0.2em] text-neutral-500';
       <div class="mt-10 flex flex-wrap items-end justify-between gap-6">
         <p class="max-w-md text-lg text-neutral-700 dark:text-white/80">{settings.tagline}</p>
         <div class="flex gap-3">
-          <a href="/booking" class="rounded-full bg-neutral-900 px-6 py-3 text-sm font-semibold text-white hover:opacity-90 dark:bg-white dark:text-black">Book a Session</a>
-          <a href={waLink} target="_blank" rel="noopener" class="rounded-full border border-black/20 px-6 py-3 text-sm font-semibold hover:bg-black/5 dark:border-white/40 dark:hover:bg-white/10">WhatsApp</a>
+          <a href="/booking" class="bg-neutral-900 px-6 py-3 text-sm font-semibold text-white hover:opacity-90 dark:bg-white dark:text-black">Book a Session</a>
+          <a href={waLink} target="_blank" rel="noopener" class="border border-black/20 px-6 py-3 text-sm font-semibold hover:bg-black/5 dark:border-white/40 dark:hover:bg-white/10">WhatsApp</a>
         </div>
       </div>
     </div>
@@ -60,7 +60,7 @@ const label = 'text-xs font-medium uppercase tracking-[0.2em] text-neutral-500';
     {works.length > 0 ? (
       <div class="mt-10 space-y-6">
         {works.map((w: any, i: number) => (
-          <a href={`/gallery?category=${w.key}`} class="group relative block aspect-[4/5] overflow-hidden rounded-3xl sm:aspect-[16/9]">
+          <a href={`/gallery?category=${w.key}`} class="group relative block aspect-[4/5] overflow-hidden sm:aspect-[16/9]">
             <img src={w.cover} alt={w.label} loading={i === 0 ? 'eager' : 'lazy'} class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
             <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent"></div>
             <div class="absolute inset-x-0 bottom-0 flex flex-wrap items-end justify-between gap-4 p-6 text-white sm:p-10">
@@ -68,13 +68,13 @@ const label = 'text-xs font-medium uppercase tracking-[0.2em] text-neutral-500';
                 <p class="text-xs font-medium uppercase tracking-[0.2em] text-white/70">[ {pad(i + 1)} ] · {w.count} foto</p>
                 <h3 class="mt-2 font-serif text-4xl leading-none sm:text-6xl">{w.label}</h3>
               </div>
-              <span class="rounded-full border border-white/40 px-5 py-2 text-xs font-semibold uppercase tracking-widest backdrop-blur group-hover:bg-white group-hover:text-black">Lihat project →</span>
+              <span class="border border-white/40 px-5 py-2 text-xs font-semibold uppercase tracking-widest backdrop-blur group-hover:bg-white group-hover:text-black">Lihat project →</span>
             </div>
           </a>
         ))}
       </div>
     ) : (
-      <p class="mt-10 rounded-2xl border border-dashed border-black/10 p-10 text-center text-neutral-500 dark:border-white/10">
+      <p class="mt-10 border border-dashed border-black/10 p-10 text-center text-neutral-500 dark:border-white/10">
         Belum ada karya ditambahkan. Buka <a href="/admin/content" class="underline">/admin/content</a> untuk menambahkan foto pertama kamu.
       </p>
     )}
@@ -95,10 +95,10 @@ const label = 'text-xs font-medium uppercase tracking-[0.2em] text-neutral-500';
     </div>
 
     <!-- Profile card, iOS-style glass -->
-    <div class="mt-14 flex items-center gap-5 rounded-3xl border border-white/10 bg-white/5 p-5 backdrop-blur-xl sm:max-w-md">
+    <div class="mt-14 flex items-center gap-5 border border-white/10 bg-white/5 p-5 backdrop-blur-xl sm:max-w-md">
       {settings.avatar
-        ? <img src={settings.avatar} alt={settings.name} class="h-16 w-16 rounded-2xl object-cover" />
-        : <div class="flex h-16 w-16 items-center justify-center rounded-2xl bg-white/10 font-serif text-3xl">{settings.name[0]}</div>}
+        ? <img src={settings.avatar} alt={settings.name} class="h-16 w-16 object-cover" />
+        : <div class="flex h-16 w-16 items-center justify-center bg-white/10 font-serif text-3xl">{settings.name[0]}</div>}
       <div>
         <p class="font-serif text-2xl leading-tight">{settings.name}</p>
         <p class="text-sm text-neutral-400">Founder · Photographer & Videographer</p>
@@ -116,20 +116,20 @@ const label = 'text-xs font-medium uppercase tracking-[0.2em] text-neutral-500';
 
     <div class="mt-12 flex flex-wrap gap-2">
       {settings.tools.map((tool: string) => (
-        <span class="rounded-full border border-black/10 px-3 py-1 text-xs font-medium dark:border-white/15">{tool}</span>
+        <span class="border border-black/10 px-3 py-1 text-xs font-medium dark:border-white/15">{tool}</span>
       ))}
     </div>
   </section>
 
   <!-- CTA -->
-  <section class="mt-28 rounded-[2rem] border border-white/10 bg-white/[0.04] px-6 py-16 text-center backdrop-blur-xl sm:px-12 sm:py-24">
+  <section class="mt-28 border border-white/10 bg-white/[0.04] px-6 py-16 text-center backdrop-blur-xl sm:px-12 sm:py-24">
     <h2 class="mx-auto max-w-3xl font-serif text-5xl leading-[0.95] sm:text-7xl">
       We bring visions to <em>life.</em><br />Let’s create <em>together.</em>
     </h2>
     <p class="mx-auto mt-6 max-w-md text-neutral-400">Bangun visual yang lebih kuat untuk momen dan brand kamu. Konsultasi gratis lewat WhatsApp.</p>
     <div class="mt-10 flex flex-wrap justify-center gap-3">
-      <a href={waLink} target="_blank" rel="noopener" class="rounded-full bg-white px-7 py-3 text-sm font-semibold uppercase tracking-widest text-black hover:opacity-90">Free Consultation</a>
-      <a href="/gallery" class="rounded-full border border-white/30 px-7 py-3 text-sm font-semibold uppercase tracking-widest hover:bg-white/10">Lihat semua karya</a>
+      <a href={waLink} target="_blank" rel="noopener" class="bg-white px-7 py-3 text-sm font-semibold uppercase tracking-widest text-black hover:opacity-90">Free Consultation</a>
+      <a href="/gallery" class="border border-white/30 px-7 py-3 text-sm font-semibold uppercase tracking-widest hover:bg-white/10">Lihat semua karya</a>
     </div>
   </section>
 </Layout>
