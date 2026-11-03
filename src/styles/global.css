@@ -6,7 +6,7 @@
   /* Body: Helvetica like the reference studio site, not the iPhone system font. */
   --font-sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
   /* Display headings: free stand-in for Editor's Note (paid font). */
-  --font-serif: "Instrument Serif", "Times New Roman", serif;
+  --font-bold tracking-tight: "Instrument Serif", "Times New Roman", serif;
 }
 
 html {

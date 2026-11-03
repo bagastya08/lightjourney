@@ -56,7 +56,7 @@ const label = 'text-xs font-medium uppercase tracking-[0.2em] text-neutral-500';
   <!-- Selected Works: one full-width banner per category -->
   <section class="mt-20">
     <p class={label}>[ Works ]</p>
-    <h2 class="mt-2 font-serif text-5xl leading-none sm:text-7xl">Selected <em>Works.</em></h2>
+    <h2 class="mt-2 font-bold tracking-tight text-5xl leading-none sm:text-7xl">Selected <em>Works.</em></h2>
     {works.length > 0 ? (
       <div class="mt-10 space-y-6">
         {works.map((w: any, i: number) => (
@@ -66,7 +66,7 @@ const label = 'text-xs font-medium uppercase tracking-[0.2em] text-neutral-500';
             <div class="absolute inset-x-0 bottom-0 flex flex-wrap items-end justify-between gap-4 p-6 text-white sm:p-10">
               <div>
                 <p class="text-xs font-medium uppercase tracking-[0.2em] text-white/70">[ {pad(i + 1)} ] · {w.count} foto</p>
-                <h3 class="mt-2 font-serif text-4xl leading-none sm:text-6xl">{w.label}</h3>
+                <h3 class="mt-2 font-bold tracking-tight text-4xl leading-none sm:text-6xl">{w.label}</h3>
               </div>
               <span class="border border-white/40 px-5 py-2 text-xs font-semibold uppercase tracking-widest backdrop-blur group-hover:bg-white group-hover:text-black">Lihat project →</span>
             </div>
@@ -83,7 +83,7 @@ const label = 'text-xs font-medium uppercase tracking-[0.2em] text-neutral-500';
   <!-- About: Bagastya -->
   <section class="mt-28 border-t border-black/10 pt-16 dark:border-white/10">
     <p class={label}>[ About ]</p>
-    <h2 class="mt-4 max-w-4xl font-serif text-5xl leading-[0.95] sm:text-7xl">
+    <h2 class="mt-4 max-w-4xl font-bold tracking-tight text-5xl leading-[0.95] sm:text-7xl">
       Crafted with <em>clarity.</em><br />Built on <em>trust.</em>
     </h2>
     <div class="mt-12 grid gap-10 sm:grid-cols-[1fr_1.4fr]">
@@ -98,15 +98,15 @@ const label = 'text-xs font-medium uppercase tracking-[0.2em] text-neutral-500';
     <div class="mt-14 flex items-center gap-5 border border-white/10 bg-white/5 p-5 backdrop-blur-xl sm:max-w-md">
       {settings.avatar
         ? <img src={settings.avatar} alt={settings.name} class="h-16 w-16 object-cover" />
-        : <div class="flex h-16 w-16 items-center justify-center bg-white/10 font-serif text-3xl">{settings.name[0]}</div>}
+        : <div class="flex h-16 w-16 items-center justify-center bg-white/10 font-bold tracking-tight text-3xl">{settings.name[0]}</div>}
       <div>
-        <p class="font-serif text-2xl leading-tight">{settings.name}</p>
+        <p class="font-bold tracking-tight text-2xl leading-tight">{settings.name}</p>
         <p class="text-sm text-neutral-400">Founder · Photographer & Videographer</p>
       </div>
     </div>
 
     <div class="mt-16 grid gap-10 sm:grid-cols-[1fr_1.4fr]">
-      <h3 class="font-serif text-4xl leading-none sm:text-5xl">Perjalanan di balik <em>lensa.</em></h3>
+      <h3 class="font-bold tracking-tight text-4xl leading-none sm:text-5xl">Perjalanan di balik <em>lensa.</em></h3>
       <div class="space-y-5 leading-relaxed text-neutral-700 dark:text-white/75">
         <p>{settings.name} memulai perjalanan sebagai fotografer dan videografer dari momen-momen kecil di sekitar — lalu berkembang ke wedding, event, produk, hingga food & beverage.</p>
         <p>Dari situ lahir <span class="text-white">“LightJourney”</span> — nama yang terinspirasi dari ide bahwa setiap karya adalah perjalanan cahaya: menangkap momen dan mengubahnya jadi cerita.</p>
@@ -123,7 +123,7 @@ const label = 'text-xs font-medium uppercase tracking-[0.2em] text-neutral-500';
 
   <!-- CTA -->
   <section class="mt-28 border border-white/10 bg-white/[0.04] px-6 py-16 text-center backdrop-blur-xl sm:px-12 sm:py-24">
-    <h2 class="mx-auto max-w-3xl font-serif text-5xl leading-[0.95] sm:text-7xl">
+    <h2 class="mx-auto max-w-3xl font-bold tracking-tight text-5xl leading-[0.95] sm:text-7xl">
       We bring visions to <em>life.</em><br />Let’s create <em>together.</em>
     </h2>
     <p class="mx-auto mt-6 max-w-md text-neutral-400">Bangun visual yang lebih kuat untuk momen dan brand kamu. Konsultasi gratis lewat WhatsApp.</p>
