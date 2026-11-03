@@ -21,6 +21,8 @@ const photos = projects
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{activeCategory?.title || 'Gallery'} — Wall</title>
     <script is:inline>
+      // Wall view is desktop-only; phones go back to Works.
+      if (innerWidth < 640) location.replace('/works' + location.search);
       const stored = localStorage.getItem('theme');
       const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
       if (stored === 'dark' || (!stored && prefersDark)) {
