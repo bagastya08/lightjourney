@@ -52,16 +52,18 @@ const isAdmin = isValidSession(Astro.cookies.get(ADMIN_COOKIE)?.value);
       <p class="text-neutral-500">Pilih tanggal di kalender untuk booking.</p>
     ) : (
       <>
-        <p class="text-lg font-semibold capitalize">{formatDateId(selected!)}</p>
+        <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+          <p class="text-lg font-semibold capitalize">{formatDateId(selected!)}</p>
+          <a href="/booking" class="text-sm text-neutral-500 hover:text-accent">Lihat semua project</a>
+        </div>
         {isBusy && <p class="mt-1 text-sm text-neutral-500">Sudah ada jadwal di tanggal ini — tetap bisa ajukan, nanti dikonfirmasi lewat WhatsApp.</p>}
-        <a href="/booking" class="mt-1 inline-block text-sm text-neutral-500 hover:text-accent">Lihat semua project</a>
         {isAdmin ? (
-          <a href={`/admin/bookings?tanggal=${selected}#panel`} class="mt-4 inline-block bg-neutral-900 px-6 py-2.5 text-sm font-semibold text-white hover:opacity-90 dark:bg-white dark:text-black">+ Tambah project tanggal ini</a>
+          <a href={`/admin/bookings?tanggal=${selected}#panel`} class="mt-5 flex w-full justify-center bg-neutral-900 sm:inline-flex sm:w-auto px-6 py-2.5 text-sm font-semibold text-white hover:opacity-90 dark:bg-white dark:text-black">+ Tambah project tanggal ini</a>
         ) : isPast ? (
           <p class="mt-2 text-sm text-neutral-500">Tanggal ini sudah lewat.</p>
         ) : (
-          <details class="group mt-4">
-            <summary class="inline-block cursor-pointer list-none bg-neutral-900 px-6 py-2.5 text-sm font-semibold text-white hover:opacity-90 group-open:hidden dark:bg-white dark:text-black">
+          <details class="group mt-5">
+            <summary class="flex w-full cursor-pointer justify-center sm:inline-flex sm:w-auto list-none bg-neutral-900 px-6 py-2.5 text-sm font-semibold text-white hover:opacity-90 group-open:hidden dark:bg-white dark:text-black">
               Booking di sini
             </summary>
   <form id="booking-form" class="grid grid-cols-1 gap-4 sm:grid-cols-2">
