@@ -1,7 +1,7 @@
 ---
 // One-month calendar. Every day links to `?tanggal=YYYY-MM-DD` (server-rendered,
 // no JS); the page reads that param and shows its own panel. Booked days get an
-// Apple-Calendar-style filled circle (red light / lime dark), the picked day a ring.
+// Apple-Calendar-style filled circle (red in light mode, soft grey in dark), the picked day a ring.
 interface Props {
   dates: string[];
 }
@@ -62,9 +62,9 @@ const keepDate = selected ? `&tanggal=${selected}` : '';
                 class:list={[
                   'mx-auto flex h-9 w-9 items-center justify-center rounded-full text-sm transition-colors sm:h-11 sm:w-11 sm:text-base',
                   booked.has(date)
-                    ? 'bg-accent font-semibold text-white hover:opacity-80'
+                    ? 'bg-[#FF3B30] font-semibold text-white hover:opacity-80 dark:bg-accent'
                     : date === today
-                      ? 'font-semibold text-accent hover:bg-black/5 dark:hover:bg-white/10'
+                      ? 'font-semibold text-[#FF3B30] hover:bg-black/5 dark:text-accent dark:hover:bg-white/10'
                       : 'text-neutral-700 hover:bg-black/5 dark:text-neutral-300 dark:hover:bg-white/10',
                   date === selected && 'ring-2 ring-neutral-900 ring-offset-2 ring-offset-white dark:ring-white dark:ring-offset-black'
                 ]}
@@ -78,6 +78,6 @@ const keepDate = selected ? `&tanggal=${selected}` : '';
     ))}
   </div>
   <p class="mt-2 flex items-center gap-2 text-xs text-neutral-500">
-    <span class="inline-block h-3 w-3 rounded-full bg-accent"></span> Sudah ada jadwal · klik tanggal untuk detail
+    <span class="inline-block h-3 w-3 rounded-full bg-[#FF3B30] dark:bg-accent"></span> Sudah ada jadwal · klik tanggal untuk detail
   </p>
 </div>
