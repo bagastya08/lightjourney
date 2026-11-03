@@ -64,7 +64,7 @@ const keepDate = selected ? `&tanggal=${selected}` : '';
                   booked.has(date)
                     ? 'bg-[#FF3B30] font-semibold text-white hover:opacity-80 dark:bg-[#C0F000] dark:text-black'
                     : date === today
-                      ? 'font-semibold text-[#FF3B30] hover:bg-black/5 dark:text-[#C0F000] dark:hover:bg-white/10'
+                      ? 'border-2 border-[#FF3B30] font-semibold text-[#FF3B30] hover:bg-black/5 dark:border-[#C0F000] dark:text-[#C0F000] dark:hover:bg-white/10'
                       : 'text-neutral-700 hover:bg-black/5 dark:text-neutral-300 dark:hover:bg-white/10',
                   date === selected && 'ring-2 ring-neutral-900 ring-offset-2 ring-offset-white dark:ring-white dark:ring-offset-black'
                 ]}
@@ -78,7 +78,7 @@ const keepDate = selected ? `&tanggal=${selected}` : '';
     ))}
   </div>
   <p class="mt-2 flex items-center gap-2 text-xs text-neutral-500">
-    <span class="inline-block h-3 w-3 rounded-full bg-[#FF3B30] dark:bg-[#C0F000]"></span> Sudah ada jadwal · klik tanggal untuk detail
+    <span class="inline-block h-3 w-3 rounded-full bg-[#FF3B30] dark:bg-[#C0F000]"></span> Sudah ada jadwal <span class="ml-3 inline-block h-3 w-3 rounded-full border-2 border-[#FF3B30] align-middle dark:border-[#C0F000]"></span> Hari ini · klik tanggal untuk detail
   </p>
 </div>
 
