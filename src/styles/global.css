@@ -55,6 +55,12 @@ body {
   color-scheme: dark;
 }
 
+/* Dropdown lists: transparent selects left options white-on-white in dark mode */
+.dark option {
+  background: #111113;
+  color: #f2f2f3;
+}
+
 .dark body {
   background: #010303;
   color: #f2f2f3;
