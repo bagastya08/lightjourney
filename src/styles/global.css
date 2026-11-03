@@ -3,8 +3,10 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
-    "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  /* Body: Helvetica like the reference studio site, not the iPhone system font. */
+  --font-sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  /* Display headings: free stand-in for Editor's Note (paid font). */
+  --font-serif: "Instrument Serif", "Times New Roman", serif;
 }
 
 html {

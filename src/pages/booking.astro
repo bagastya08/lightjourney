@@ -34,7 +34,7 @@ const isAdmin = isValidSession(Astro.cookies.get(ADMIN_COOKIE)?.value);
 ---
 
 <Layout title="Booking — Bagastya">
-  <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">Book a Session</h1>
+  <h1 class="font-serif text-5xl leading-none sm:text-6xl">Book a Session</h1>
   <p class="mt-2 text-neutral-600 dark:text-neutral-400">Klik tanggal di kalender, lalu tekan Booking di sini. Konfirmasi lewat WhatsApp.</p>
 
   <BookedCalendar dates={busyDates} />

@@ -34,7 +34,7 @@ const isAdmin = isValidSession(Astro.cookies.get(ADMIN_COOKIE)?.value);
 ---
 
 <Layout title="Project — Bagastya">
-  <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">Project</h1>
+  <h1 class="font-serif text-5xl leading-none sm:text-6xl">Project</h1>
   <p class="mt-2 text-neutral-600 dark:text-neutral-400">Jadwal & daftar kegiatan. Untuk melihat dan memilih foto, masukkan kode yang dikirim lewat WhatsApp.</p>
 
   <BookedCalendar dates={projects.map((p) => p.preferred_date)} />
