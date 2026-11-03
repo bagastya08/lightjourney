@@ -29,9 +29,10 @@ const isVideo = !!(project.videoFileUrl || project.videoUrl);
   {project.description && <p class="mt-4 max-w-2xl text-neutral-600 dark:text-neutral-400">{project.description}</p>}
 
   {isVideo && (
-    <div class="mt-10 aspect-video bg-black">
+    <div class:list={['mt-10 bg-black', !project.videoFileUrl && 'aspect-video']}>
       {project.videoFileUrl ? (
-        <video src={project.videoFileUrl} autoplay muted loop controls playsinline preload="auto" class="h-full w-full"></video>
+        // Keeps the video's own shape, so vertical (9:16) clips are not shrunk into a 16:9 box.
+        <video src={project.videoFileUrl} autoplay muted loop controls playsinline preload="auto" class="mx-auto block max-h-[85vh] w-full object-contain"></video>
       ) : (
         <iframe src={`${embedUrl(project.videoUrl)}${embedUrl(project.videoUrl).includes('?') ? '&' : '?'}autoplay=1&mute=1`} title={project.title} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen class="h-full w-full"></iframe>
       )}
