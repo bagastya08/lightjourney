@@ -40,7 +40,6 @@ const tab = (p: any) => p.groupId;
               ) : p.videoFileUrl ? (
                 <video src={/dynast/i.test(p.title) ? "/hero.mp4" : p.videoFileUrl} autoplay muted loop playsinline preload="metadata" class="h-full w-full object-cover"></video>
               ) : null}
-              {p.category === 'Video' && <span class="absolute left-4 top-4 bg-accent px-2 py-1 text-[10px] font-semibold uppercase tracking-widest text-white">Video</span>}
             </div>
             <div class="mt-4 flex items-baseline justify-between gap-4">
               <h2 class="min-w-0 text-xl font-bold tracking-tight">{p.title}</h2>

@@ -29,7 +29,7 @@ export async function getSettings() {
   }
 }
 
-const GROUPS_QUERY = `*[_type == "projectGroup"] | order(order asc, date asc){ _id, title }`;
+const GROUPS_QUERY = `*[_type == "projectGroup"] | order(order asc, date asc){ _id, title, cover }`;
 
 const PROJECTS_QUERY = `*[_type == "project"] | order(_createdAt desc) {
   _id, title, category, description, client,
@@ -47,7 +47,11 @@ const PROJECTS_QUERY = `*[_type == "project"] | order(_createdAt desc) {
 export async function getCategories(fresh = false) {
   const client = fresh ? sanityFresh : sanityRead;
   try {
-    return await client.fetch(GROUPS_QUERY);
+    const groups = await client.fetch(GROUPS_QUERY);
+    return (groups || []).map((g: any) => ({
+      ...g,
+      coverUrl: g.cover?.asset ? urlFor(g.cover).width(1200).auto('format').url() : null
+    }));
   } catch {
     return [];
   }

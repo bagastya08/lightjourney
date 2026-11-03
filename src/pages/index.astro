@@ -11,10 +11,11 @@ const waLink = whatsappLink(settings.whatsapp, settings.whatsappMessage);
 // One banner per category: its newest photo as cover, links to the filtered gallery.
 const works = groups
   .map((group: any) => {
-    const groupProjects = projects.filter((p: any) => p.groupId === group._id && p.category === 'Foto');
-    const cover = groupProjects.flatMap((p: any) => p.imageUrls)[0];
+    const groupProjects = projects.filter((p: any) => p.groupId === group._id);
+    // Cover picked in admin ("Jadikan cover"), else the newest photo.
+    const cover = group.coverUrl || groupProjects.flatMap((p: any) => p.imageUrls)[0]?.url;
     const count = groupProjects.reduce((n: number, p: any) => n + p.imageUrls.length, 0);
-    return { key: group._id, label: group.title, cover: cover?.url, count };
+    return { key: group._id, label: group.title, cover, count };
   })
   .filter((w: any) => w.cover);
 
