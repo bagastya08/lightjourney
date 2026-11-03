@@ -18,9 +18,10 @@ const cats = groups
   .map((g: any) => {
     const ps = projects.filter((p: any) => p.groupId === g._id);
     if (!ps.length) return null;
-    const img = g.coverUrl || ps.flatMap((p: any) => p.imageUrls)[0]?.url || null;
-    const v = img ? null : ps.find((p: any) => p.videoFileUrl);
+    // A category with a video uses it as the cover; otherwise the chosen cover photo, else the newest photo.
+    const v = ps.find((p: any) => p.videoFileUrl);
     const video = v ? (/dynast/i.test(v.title) ? '/hero.mp4' : v.videoFileUrl) : null;
+    const img = video ? null : g.coverUrl || ps.flatMap((p: any) => p.imageUrls)[0]?.url || null;
     return { key: g._id, label: g.title, img, video, count: ps.length };
   })
   .filter(Boolean);
