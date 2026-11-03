@@ -13,7 +13,7 @@ const poster = images[0];
 {(video || poster) && (
   <div class="absolute inset-0 overflow-hidden bg-black">
     {video ? (
-      <video src={video} poster={poster} autoplay muted loop playsinline preload="auto" class="h-full w-full object-cover"></video>
+      <video src={video} autoplay muted loop playsinline preload="auto" class="h-full w-full object-cover"></video>
     ) : (
       <img src={poster} alt="" class="h-full w-full object-cover" loading="eager" fetchpriority="high" />
     )}
