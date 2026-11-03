@@ -18,15 +18,15 @@ try {
   <p class="mt-1 text-sm text-neutral-500">Hero background otomatis diambil dari foto portfolio terbaru (per project) — atur di /admin/content.</p>
 
   {sanityError && (
-    <p class="mt-4 rounded-xl border border-amber-300 bg-amber-50 p-4 text-sm text-amber-800 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-300">
+    <p class="mt-4 border border-amber-300 bg-amber-50 p-4 text-sm text-amber-800 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-300">
       {sanityError} — isi PUBLIC_SANITY_PROJECT_ID, PUBLIC_SANITY_DATASET, SANITY_API_TOKEN di .env.
     </p>
   )}
 
-  <form id="settings-form" class="mt-6 grid grid-cols-1 gap-4 rounded-2xl border border-black/10 p-4 dark:border-white/10 sm:grid-cols-2">
+  <form id="settings-form" class="mt-6 grid grid-cols-1 gap-4 border border-black/10 p-4 dark:border-white/10 sm:grid-cols-2">
     <div>
       <label class="mb-1 block text-sm font-medium">Nama</label>
-      <input name="name" value={settings?.name || ''} class="w-full rounded-xl border border-black/10 bg-transparent px-3 py-2 outline-none dark:border-white/15" />
+      <input name="name" value={settings?.name || ''} class="w-full border border-black/10 bg-transparent px-3 py-2 outline-none dark:border-white/15" />
     </div>
     <div>
       <label class="mb-1 block text-sm font-medium">Avatar</label>
@@ -34,33 +34,33 @@ try {
     </div>
     <div class="sm:col-span-2">
       <label class="mb-1 block text-sm font-medium">Tagline (headline hero)</label>
-      <input name="tagline" value={settings?.tagline || ''} class="w-full rounded-xl border border-black/10 bg-transparent px-3 py-2 outline-none dark:border-white/15" />
+      <input name="tagline" value={settings?.tagline || ''} class="w-full border border-black/10 bg-transparent px-3 py-2 outline-none dark:border-white/15" />
     </div>
     <div class="sm:col-span-2">
       <label class="mb-1 block text-sm font-medium">Tags (pisahkan koma)</label>
-      <input name="tags" value={(settings?.tags || []).join(', ')} class="w-full rounded-xl border border-black/10 bg-transparent px-3 py-2 outline-none dark:border-white/15" />
+      <input name="tags" value={(settings?.tags || []).join(', ')} class="w-full border border-black/10 bg-transparent px-3 py-2 outline-none dark:border-white/15" />
     </div>
     <div class="sm:col-span-2">
       <label class="mb-1 block text-sm font-medium">Tools (badge di hero, pisahkan koma)</label>
-      <input name="tools" value={(settings?.tools || ['Lightroom', 'Premiere Pro', 'DaVinci Resolve', 'Illustrator']).join(', ')} class="w-full rounded-xl border border-black/10 bg-transparent px-3 py-2 outline-none dark:border-white/15" />
+      <input name="tools" value={(settings?.tools || ['Lightroom', 'Premiere Pro', 'DaVinci Resolve', 'Illustrator']).join(', ')} class="w-full border border-black/10 bg-transparent px-3 py-2 outline-none dark:border-white/15" />
     </div>
     <div>
       <label class="mb-1 block text-sm font-medium">Nomor WhatsApp</label>
-      <input name="whatsapp" value={settings?.whatsapp || ''} class="w-full rounded-xl border border-black/10 bg-transparent px-3 py-2 outline-none dark:border-white/15" />
+      <input name="whatsapp" value={settings?.whatsapp || ''} class="w-full border border-black/10 bg-transparent px-3 py-2 outline-none dark:border-white/15" />
     </div>
     <div>
       <label class="mb-1 block text-sm font-medium">Pesan default WhatsApp</label>
-      <input name="whatsappMessage" value={settings?.whatsappMessage || ''} class="w-full rounded-xl border border-black/10 bg-transparent px-3 py-2 outline-none dark:border-white/15" />
+      <input name="whatsappMessage" value={settings?.whatsappMessage || ''} class="w-full border border-black/10 bg-transparent px-3 py-2 outline-none dark:border-white/15" />
     </div>
     <div>
       <label class="mb-1 block text-sm font-medium">Instagram URL</label>
-      <input name="instagram" value={settings?.instagram || ''} class="w-full rounded-xl border border-black/10 bg-transparent px-3 py-2 outline-none dark:border-white/15" />
+      <input name="instagram" value={settings?.instagram || ''} class="w-full border border-black/10 bg-transparent px-3 py-2 outline-none dark:border-white/15" />
     </div>
     <div>
       <label class="mb-1 block text-sm font-medium">LinkedIn URL</label>
-      <input name="linkedin" value={settings?.linkedin || ''} class="w-full rounded-xl border border-black/10 bg-transparent px-3 py-2 outline-none dark:border-white/15" />
+      <input name="linkedin" value={settings?.linkedin || ''} class="w-full border border-black/10 bg-transparent px-3 py-2 outline-none dark:border-white/15" />
     </div>
-    <button type="submit" class="rounded-full bg-neutral-900 px-5 py-2.5 text-sm font-semibold text-white dark:bg-white dark:text-black sm:col-span-2">
+    <button type="submit" class="bg-neutral-900 px-5 py-2.5 text-sm font-semibold text-white dark:bg-white dark:text-black sm:col-span-2">
       Simpan
     </button>
     <p id="form-status" class="text-sm sm:col-span-2"></p>

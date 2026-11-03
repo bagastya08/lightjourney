@@ -40,58 +40,58 @@ try {
   <h1 class="mt-2 text-2xl font-bold">Portfolio Content</h1>
 
   {sanityError && (
-    <p class="mt-4 rounded-xl border border-amber-300 bg-amber-50 p-4 text-sm text-amber-800 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-300">
+    <p class="mt-4 border border-amber-300 bg-amber-50 p-4 text-sm text-amber-800 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-300">
       {sanityError} — isi PUBLIC_SANITY_PROJECT_ID, PUBLIC_SANITY_DATASET, SANITY_API_TOKEN di .env.
     </p>
   )}
 
   <h2 class="mt-6 text-lg font-semibold">Kategori (Project Group)</h2>
-  <form id="group-form" class="mt-2 flex flex-wrap items-end gap-3 rounded-2xl border border-black/10 p-4 dark:border-white/10">
+  <form id="group-form" class="mt-2 flex flex-wrap items-end gap-3 border border-black/10 p-4 dark:border-white/10">
     <div>
       <label class="mb-1 block text-sm font-medium">Nama kategori baru</label>
-      <input required name="title" placeholder="misal: Wedding Photography" class="w-64 rounded-xl border border-black/10 bg-transparent px-3 py-2 outline-none dark:border-white/15" />
+      <input required name="title" placeholder="misal: Wedding Photography" class="w-64 border border-black/10 bg-transparent px-3 py-2.5 outline-none dark:border-white/15" />
     </div>
-    <button type="submit" class="rounded-full bg-neutral-900 px-5 py-2.5 text-sm font-semibold text-white dark:bg-white dark:text-black">Tambah Kategori</button>
+    <button type="submit" class="bg-neutral-900 px-5 py-2.5 text-sm font-semibold text-white dark:bg-white dark:text-black">Tambah Kategori</button>
   </form>
   <div class="mt-3 flex flex-wrap gap-2">
     {groups.map((g: any) => (
-      <span class="rounded-full bg-black/5 px-3 py-1.5 text-sm dark:bg-white/10">{g.title}</span>
+      <span class="bg-black/5 px-3 py-1.5 text-sm dark:bg-white/10">{g.title}</span>
     ))}
     {groups.length === 0 && !sanityError && <p class="text-sm text-neutral-500">Belum ada kategori.</p>}
   </div>
 
   <h2 class="mt-10 text-lg font-semibold">Tambah Project (Foto/Video)</h2>
-  <form id="project-form" class="mt-2 grid grid-cols-1 gap-4 rounded-2xl border border-black/10 p-4 dark:border-white/10 sm:grid-cols-2">
+  <form id="project-form" class="mt-3 grid grid-cols-1 items-start gap-x-5 gap-y-4 border border-black/10 p-5 sm:grid-cols-2 sm:p-6 dark:border-white/10">
     <div>
       <label class="mb-1 block text-sm font-medium">Judul Project</label>
-      <input required name="title" placeholder="misal: Wedding Ayu & Dimas" class="w-full rounded-xl border border-black/10 bg-transparent px-3 py-2 outline-none dark:border-white/15" />
+      <input required name="title" placeholder="misal: Wedding Ayu & Dimas" class="w-full border border-black/10 bg-transparent px-3 py-2.5 outline-none dark:border-white/15" />
     </div>
     <div>
       <label class="mb-1 block text-sm font-medium">Nama Client (opsional)</label>
-      <input name="clientName" placeholder="misal: Dot Coffee" class="w-full rounded-xl border border-black/10 bg-transparent px-3 py-2 outline-none dark:border-white/15" />
+      <input name="clientName" placeholder="misal: Dot Coffee" class="w-full border border-black/10 bg-transparent px-3 py-2.5 outline-none dark:border-white/15" />
     </div>
     <div>
       <label class="mb-1 block text-sm font-medium">Kategori</label>
-      <select required name="groupId" class="w-full rounded-xl border border-black/10 bg-transparent px-3 py-2 outline-none dark:border-white/15">
+      <select required name="groupId" class="w-full border border-black/10 bg-transparent px-3 py-2.5 outline-none dark:border-white/15">
         {groups.map((g: any) => <option value={g._id}>{g.title}</option>)}
       </select>
     </div>
     <div>
       <label class="mb-1 block text-sm font-medium">Tipe</label>
-      <select name="category" class="w-full rounded-xl border border-black/10 bg-transparent px-3 py-2 outline-none dark:border-white/15">
+      <select name="category" class="w-full border border-black/10 bg-transparent px-3 py-2.5 outline-none dark:border-white/15">
         <option value="Foto">Foto</option>
         <option value="Video">Video</option>
       </select>
     </div>
-    <div>
+    <div class="sm:col-span-2">
       <label class="mb-1 block text-sm font-medium">Foto (bisa banyak sekaligus)</label>
       <input type="file" name="images" accept="image/*" multiple class="w-full text-sm" />
     </div>
     <div class="sm:col-span-2">
-      <label class="mb-1 block text-sm font-medium">Deskripsi acara (opsional, tampil saat foto diklik di Gallery)</label>
-      <textarea name="description" rows="2" placeholder="misal: Prewedding Ayu & Dimas di Nusa Penida, Agustus 2026" class="w-full rounded-xl border border-black/10 bg-transparent px-3 py-2 outline-none dark:border-white/15"></textarea>
+      <label class="mb-1 block text-sm font-medium">Deskripsi acara <span class="font-normal text-neutral-500">(opsional, tampil di halaman project)</span></label>
+      <textarea name="description" rows="2" placeholder="misal: Prewedding Ayu & Dimas di Nusa Penida, Agustus 2026" class="w-full border border-black/10 bg-transparent px-3 py-2.5 outline-none dark:border-white/15"></textarea>
     </div>
-    <button type="submit" class="rounded-full bg-neutral-900 px-5 py-2.5 text-sm font-semibold text-white dark:bg-white dark:text-black sm:col-span-2">
+    <button type="submit" class="w-fit bg-neutral-900 px-6 py-2.5 text-sm font-semibold text-white dark:bg-white dark:text-black sm:col-span-2">
       Simpan Project
     </button>
     <p id="project-status" class="text-sm sm:col-span-2"></p>
@@ -100,23 +100,23 @@ try {
   <h2 class="mt-10 text-lg font-semibold">Semua Project</h2>
   <div class="mt-3 space-y-3">
     {projects.map((p: any) => (
-      <div class="project-card rounded-2xl border border-black/10 p-4 dark:border-white/10" data-id={p._id}>
+      <div class="project-card border border-black/10 p-4 dark:border-white/10" data-id={p._id}>
         <div class="flex flex-wrap items-center gap-3">
-          {p.thumb && <img src={p.thumb} alt={p.title} class="h-16 w-16 rounded-xl object-cover" />}
+          {p.thumb && <img src={p.thumb} alt={p.title} class="h-16 w-16 object-cover" />}
           <div class="flex-1">
             <p class="font-medium">{p.title}{p.client ? ` · ${p.client}` : ''}</p>
             <p class="text-sm text-neutral-500">{p.groupTitle} · {p.category} · {p.imageCount} foto{p.category === 'Video' && (p.videoFileUrl || p.videoUrl) ? ' · video terpasang' : ''}</p>
           </div>
-          <button class="delete-project-btn rounded-full bg-red-600/90 px-3 py-1.5 text-xs font-semibold text-white">Hapus</button>
+          <button class="delete-project-btn bg-red-600/90 px-3 py-1.5 text-xs font-semibold text-white">Hapus</button>
         </div>
 
         <details class="mt-3">
           <summary class="cursor-pointer text-sm text-neutral-500">+ Edit judul & deskripsi</summary>
           <form class="edit-info-form mt-2 flex flex-col gap-2" data-id={p._id}>
-            <input name="title" value={p.title} placeholder="Judul project" class="rounded-xl border border-black/10 bg-transparent px-3 py-1.5 text-sm outline-none dark:border-white/15" />
-            <input name="clientName" value={p.client || ''} placeholder="Nama client" class="rounded-xl border border-black/10 bg-transparent px-3 py-1.5 text-sm outline-none dark:border-white/15" />
-            <textarea name="description" rows="2" placeholder="Deskripsi acara ini..." class="rounded-xl border border-black/10 bg-transparent px-3 py-1.5 text-sm outline-none dark:border-white/15">{p.description || ''}</textarea>
-            <button type="submit" class="w-fit rounded-full border border-black/10 px-3 py-1.5 text-xs font-semibold dark:border-white/15">Simpan</button>
+            <input name="title" value={p.title} placeholder="Judul project" class="border border-black/10 bg-transparent px-3 py-1.5 text-sm outline-none dark:border-white/15" />
+            <input name="clientName" value={p.client || ''} placeholder="Nama client" class="border border-black/10 bg-transparent px-3 py-1.5 text-sm outline-none dark:border-white/15" />
+            <textarea name="description" rows="2" placeholder="Deskripsi acara ini..." class="border border-black/10 bg-transparent px-3 py-1.5 text-sm outline-none dark:border-white/15">{p.description || ''}</textarea>
+            <button type="submit" class="w-fit border border-black/10 px-3 py-1.5 text-xs font-semibold dark:border-white/15">Simpan</button>
           </form>
         </details>
 
@@ -138,7 +138,7 @@ try {
           <summary class="cursor-pointer text-sm text-neutral-500">+ Tambah foto ke project ini</summary>
           <form class="add-images-form mt-2 flex items-center gap-2" data-id={p._id}>
             <input type="file" name="images" accept="image/*" multiple class="text-sm" />
-            <button type="submit" class="rounded-full border border-black/10 px-3 py-1.5 text-xs font-semibold dark:border-white/15">Upload</button>
+            <button type="submit" class="border border-black/10 px-3 py-1.5 text-xs font-semibold dark:border-white/15">Upload</button>
           </form>
         </details>
 
@@ -146,9 +146,9 @@ try {
           <details class="mt-2">
             <summary class="cursor-pointer text-sm text-neutral-500">+ Pasang video</summary>
             <form class="add-video-form mt-2 flex flex-wrap items-center gap-2" data-id={p._id}>
-              <input name="videoUrl" placeholder="atau tempel URL YouTube/Vimeo" class="rounded-xl border border-black/10 bg-transparent px-3 py-1.5 text-sm outline-none dark:border-white/15" />
+              <input name="videoUrl" placeholder="atau tempel URL YouTube/Vimeo" class="border border-black/10 bg-transparent px-3 py-1.5 text-sm outline-none dark:border-white/15" />
               {unattachedVideos.length > 0 && (
-                <select name="existingAssetId" class="rounded-xl border border-black/10 bg-transparent px-3 py-1.5 text-sm outline-none dark:border-white/15">
+                <select name="existingAssetId" class="border border-black/10 bg-transparent px-3 py-1.5 text-sm outline-none dark:border-white/15">
                   <option value="">— pilih file video yang sudah keupload —</option>
                   {unattachedVideos.map((v: any) => (
                     <option value={v._id}>{v.originalFilename} ({Math.round(v.size / 1024 / 1024)}MB)</option>
@@ -156,7 +156,7 @@ try {
                 </select>
               )}
               <input type="file" name="videoFile" accept="video/*" class="text-sm" />
-              <button type="submit" class="rounded-full border border-black/10 px-3 py-1.5 text-xs font-semibold dark:border-white/15">Pasang</button>
+              <button type="submit" class="border border-black/10 px-3 py-1.5 text-xs font-semibold dark:border-white/15">Pasang</button>
             </form>
           </details>
         )}

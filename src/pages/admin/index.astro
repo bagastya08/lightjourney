@@ -26,18 +26,18 @@ try {
   </div>
 
   {dbError && (
-    <p class="mt-6 rounded-xl border border-amber-300 bg-amber-50 p-4 text-sm text-amber-800 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-300">
+    <p class="mt-6 border border-amber-300 bg-amber-50 p-4 text-sm text-amber-800 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-300">
       {dbError} — isi SUPABASE_URL & SUPABASE_SERVICE_ROLE_KEY di .env, lalu jalankan supabase/schema.sql.
     </p>
   )}
 
   <div class="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
-    <a href="/admin/bookings" class="rounded-2xl border border-black/10 p-6 hover:bg-black/5 dark:border-white/10 dark:hover:bg-white/5">
+    <a href="/admin/bookings" class="border border-black/10 p-6 hover:bg-black/5 dark:border-white/10 dark:hover:bg-white/5">
       <p class="text-sm text-neutral-500">Booking baru dari web</p>
       <p class="mt-1 text-3xl font-bold">{bookingCount}</p>
       <p class="mt-2 text-sm font-medium underline">Lihat semua project →</p>
     </a>
-    <a href="/admin/bookings" class="rounded-2xl border border-black/10 p-6 hover:bg-black/5 dark:border-white/10 dark:hover:bg-white/5">
+    <a href="/admin/bookings" class="border border-black/10 p-6 hover:bg-black/5 dark:border-white/10 dark:hover:bg-white/5">
       <p class="text-sm text-neutral-500">Link proofing aktif</p>
       <p class="mt-1 text-3xl font-bold">{activeLinks}</p>
       <p class="mt-2 text-sm font-medium underline">Kelola foto & pilihan client →</p>
@@ -45,10 +45,10 @@ try {
   </div>
 
   <div class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
-    <a href="/admin/content" class="block rounded-2xl border border-black/10 p-6 hover:bg-black/5 dark:border-white/10 dark:hover:bg-white/5">
+    <a href="/admin/content" class="block border border-black/10 p-6 hover:bg-black/5 dark:border-white/10 dark:hover:bg-white/5">
       <p class="text-sm font-medium">Kelola foto & video portfolio →</p>
     </a>
-    <a href="/admin/settings" class="block rounded-2xl border border-black/10 p-6 hover:bg-black/5 dark:border-white/10 dark:hover:bg-white/5">
+    <a href="/admin/settings" class="block border border-black/10 p-6 hover:bg-black/5 dark:border-white/10 dark:hover:bg-white/5">
       <p class="text-sm font-medium">Kelola hero background, teks, kontak →</p>
     </a>
   </div>
