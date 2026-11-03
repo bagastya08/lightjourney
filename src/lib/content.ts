@@ -86,6 +86,7 @@ export function formatDateId(iso: string) {
 
 export const SESSION_TYPES: Record<string, string> = {
   wedding: 'Wedding',
+  wisuda: 'Wisuda',
   sport: 'Sport',
   fnb: 'Food & Beverage',
   property: 'Hotel & Property',
