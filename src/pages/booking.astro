@@ -12,7 +12,7 @@ try {
   const { data } = await supabase
     .from('bookings')
     .select('preferred_date')
-    .in('status', ['new', 'confirmed'])
+    .neq('status', 'cancelled')
     .gte('preferred_date', new Date().toISOString().slice(0, 10));
   busyDates = (data ?? []).map((b) => b.preferred_date);
 } catch {

@@ -3,23 +3,23 @@ export const prerender = false;
 import Layout from '../layouts/Layout.astro';
 import { supabaseAdmin } from '../lib/supabase';
 import BookedCalendar from '../components/BookedCalendar.astro';
-import { formatDateId, isIsoDate } from '../lib/content';
+import { formatDateId, isIsoDate, SESSION_TYPES } from '../lib/content';
 import { isValidSession, ADMIN_COOKIE } from '../lib/admin-auth';
 
 // The access code is the booking's proof token; /proof/[token] does the lookup.
 const code = (Astro.url.searchParams.get('kode') || '').trim().toUpperCase().replace(/[^A-Z0-9]/g, '');
 if (code) return Astro.redirect(`/proof/${code}`);
 
-// Public list: only projects you gave a title. Never select token/whatsapp here.
+// Public list: every non-cancelled booking. Untitled ones show their session type,
+// never the client's name. Photos stay behind the access code. Never select token/whatsapp here.
 let projects: { id: string; title: string; preferred_date: string }[] = [];
 try {
   const { data } = await supabaseAdmin()
     .from('bookings')
-    .select('id, title, preferred_date')
-    .not('title', 'is', null)
+    .select('id, title, session_type, preferred_date')
     .neq('status', 'cancelled')
     .order('preferred_date', { ascending: false });
-  projects = data ?? [];
+  projects = (data ?? []).map((b) => ({ ...b, title: b.title || SESSION_TYPES[b.session_type] || 'Project' }));
 } catch {
   // Database belum terhubung — tampilkan form kode saja.
 }

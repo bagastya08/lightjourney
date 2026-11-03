@@ -7,11 +7,12 @@ import imageUrlBuilder from '@sanity/image-url';
 const projectId = import.meta.env.PUBLIC_SANITY_PROJECT_ID || 'placeholder';
 const dataset = import.meta.env.PUBLIC_SANITY_DATASET || 'production';
 
+// No CDN: public pages must show admin edits right away (CDN cache made them lag).
 export const sanityRead = createClient({
   projectId,
   dataset,
   apiVersion: '2024-01-01',
-  useCdn: true
+  useCdn: false
 });
 
 // No CDN cache — used in /admin so a fresh upload shows up immediately.
