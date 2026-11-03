@@ -10,6 +10,20 @@ const projects = (await getProjects()).filter(
 // Filter tabs: every category from admin; videos sit in their own category.
 const tabs = groups.map((g: any) => ({ key: g._id, label: g.title }));
 const tab = (p: any) => p.groupId;
+// Server renders the right view first so nothing flashes before the script runs.
+const initial = Astro.url.searchParams.get('category') || '';
+
+// "All" shows one card per category; clicking it opens that category's projects.
+const cats = groups
+  .map((g: any) => {
+    const ps = projects.filter((p: any) => p.groupId === g._id);
+    if (!ps.length) return null;
+    const img = g.coverUrl || ps.flatMap((p: any) => p.imageUrls)[0]?.url || null;
+    const v = img ? null : ps.find((p: any) => p.videoFileUrl);
+    const video = v ? (/dynast/i.test(v.title) ? '/hero.mp4' : v.videoFileUrl) : null;
+    return { key: g._id, label: g.title, img, video, count: ps.length };
+  })
+  .filter(Boolean);
 ---
 
 <Layout title="Works — LightJourney">
@@ -28,12 +42,31 @@ const tab = (p: any) => p.groupId;
 
   <p id="works-empty" class="mt-16 hidden border border-dashed border-black/10 p-10 text-center text-neutral-500 dark:border-white/10">Belum ada karya di kategori ini.</p>
 
+  <div id="cat-grid" class:list={['mt-10 grid grid-cols-1 gap-x-6 gap-y-12 sm:grid-cols-2', initial && 'hidden']}>
+    {cats.map((c: any, i: number) => (
+      <button type="button" data-tab={c.key} class="cat-card group block text-left">
+        <div class="relative aspect-[4/3] overflow-hidden bg-neutral-900">
+          {c.img ? (
+            <img src={c.img} alt={c.label} loading={i < 2 ? 'eager' : 'lazy'} class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
+          ) : c.video ? (
+            <video src={c.video} autoplay muted loop playsinline preload="metadata" class="h-full w-full object-cover"></video>
+          ) : null}
+        </div>
+        <div class="mt-4 flex items-baseline justify-between gap-4">
+          <h2 class="min-w-0 text-xl font-bold tracking-tight">{c.label}</h2>
+          <span class="shrink-0 text-xs font-semibold uppercase tracking-[0.2em] text-neutral-500 transition-colors group-hover:text-accent">View category →</span>
+        </div>
+        <p class="mt-1 text-sm text-neutral-500">{c.count} project</p>
+      </button>
+    ))}
+  </div>
+
   {projects.length > 0 ? (
     <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-12 sm:grid-cols-2">
       {projects.map((p: any, i: number) => {
         const cover = p.category === 'Foto' ? p.imageUrls[0].url : p.videoUrl && !p.videoFileUrl ? youtubeThumb(p.videoUrl) : null;
         return (
-          <a href={`/works/${p._id}`} data-tab={tab(p)} class="work-card group block">
+          <a href={`/works/${p._id}`} data-tab={tab(p)} class="work-card group block" style={initial === tab(p) ? undefined : 'display:none'}>
             <div class="relative aspect-[4/3] overflow-hidden bg-neutral-900">
               {cover ? (
                 <img src={cover} alt={p.title} loading={i < 2 ? 'eager' : 'lazy'} class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
@@ -59,18 +92,24 @@ const tab = (p: any) => p.groupId;
   <script is:inline>
     function applyTab(key) {
       document.querySelectorAll('.tab-btn').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.tab === key)));
+      document.getElementById('cat-grid')?.classList.toggle('hidden', !!key);
       let shown = 0;
       document.querySelectorAll('.work-card').forEach((c) => {
-        const on = !key || c.dataset.tab === key;
+        const on = !!key && c.dataset.tab === key;
         c.style.display = on ? '' : 'none';
         shown += on;
       });
-      document.getElementById('works-empty')?.classList.toggle('hidden', shown > 0);
+      document.getElementById('works-empty')?.classList.toggle('hidden', !key || shown > 0);
     }
-    document.querySelectorAll('.tab-btn').forEach((b) => b.addEventListener('click', () => {
-      applyTab(b.dataset.tab);
-      history.replaceState(null, '', b.dataset.tab ? `?category=${b.dataset.tab}` : location.pathname);
+    function go(key) {
+      applyTab(key);
+      history.replaceState(null, '', key ? `?category=${key}` : location.pathname);
+    }
+    document.querySelectorAll('.cat-card').forEach((c) => c.addEventListener('click', () => {
+      go(c.dataset.tab);
+      document.querySelector('.tab-btn')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }));
+    document.querySelectorAll('.tab-btn').forEach((b) => b.addEventListener('click', () => go(b.dataset.tab)));
     applyTab(new URLSearchParams(location.search).get('category') || '');
   </script>
 </Layout>
