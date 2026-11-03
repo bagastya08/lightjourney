@@ -5,8 +5,8 @@
 @theme {
   /* Body: Helvetica like the reference studio site, not the iPhone system font. */
   --font-sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  /* Brand orange (logo), for small accents only */
-  --color-accent: #e8650a;
+  /* Accent: soft faded black (black at lower opacity), for small details only */
+  --color-accent: #6b6b6b;
 }
 
 html {
@@ -31,6 +31,6 @@ body {
 
 ::selection,
 .dark ::selection {
-  background: #e8650a;
+  background: #6b6b6b;
   color: #fff;
 }
