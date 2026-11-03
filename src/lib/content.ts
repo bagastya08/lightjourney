@@ -8,7 +8,7 @@ export const DEFAULT_SETTINGS = {
   avatar: null as string | null,
   whatsapp: '62895412230426',
   whatsappMessage: 'Halo Bagastya, saya tertarik untuk booking sesi foto/video.',
-  instagram: 'https://www.instagram.com/journey.creative4/',
+  instagram: 'https://www.instagram.com/journey.creativ4/',
   linkedin: 'https://www.linkedin.com/in/kadek-bagastya-adi-72701b2b5/',
   email: ''
 };
