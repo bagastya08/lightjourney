@@ -1,4 +1,5 @@
 import type { APIRoute } from 'astro';
+import { randomUUID } from 'node:crypto';
 import { sanityWrite } from '../../../lib/sanity';
 
 export const prerender = false;
@@ -23,7 +24,7 @@ export const POST: APIRoute = async ({ request }) => {
       if (!file || file.size === 0) continue;
       const buffer = Buffer.from(await file.arrayBuffer());
       const asset = await client.assets.upload('image', buffer, { filename: file.name });
-      images.push({ _type: 'image', _key: asset._id.slice(-12), asset: { _type: 'reference', _ref: asset._id } });
+      images.push({ _type: 'image', _key: randomUUID().slice(0, 12), // unique per photo (old key came from the dimensions and collided) asset: { _type: 'reference', _ref: asset._id } });
     }
 
     await client.create({
