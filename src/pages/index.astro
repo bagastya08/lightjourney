@@ -95,23 +95,25 @@ const label = 'text-xs font-medium uppercase tracking-[0.2em] text-neutral-500';
       </div>
     </div>
 
-    <!-- Profile card, iOS-style glass -->
-    <div class="mt-14 flex items-center gap-5 border border-white/10 bg-white/5 p-5 backdrop-blur-xl sm:max-w-md">
-      {settings.avatar
-        ? <img src={settings.avatar} alt={settings.name} class="h-16 w-16 object-cover" />
-        : <div class="flex h-16 w-16 items-center justify-center bg-white/10 font-bold tracking-tight text-3xl">{settings.name[0]}</div>}
+    <!-- Profile: portrait + story -->
+    <div class="mt-16 grid items-start gap-10 sm:grid-cols-[1fr_1.4fr]">
+      <figure>
+        <div class="aspect-[4/5] overflow-hidden bg-neutral-900">
+          <!-- Subject sits in the lower half of the shot -->
+          <img src="/bagastya.jpg" alt={settings.name} loading="lazy" class="h-full w-full object-cover object-[50%_78%]" />
+        </div>
+        <figcaption class="mt-4">
+          <p class="text-2xl font-bold leading-tight tracking-tight">{settings.name}</p>
+          <p class="text-sm text-neutral-400">Founder · Photographer & Videographer</p>
+        </figcaption>
+      </figure>
       <div>
-        <p class="font-bold tracking-tight text-2xl leading-tight">{settings.name}</p>
-        <p class="text-sm text-neutral-400">Founder · Photographer & Videographer</p>
-      </div>
-    </div>
-
-    <div class="mt-16 grid gap-10 sm:grid-cols-[1fr_1.4fr]">
-      <h3 class="font-bold tracking-tight text-4xl leading-none sm:text-5xl">Perjalanan di balik <em class="text-accent">lensa.</em></h3>
-      <div class="space-y-5 leading-relaxed text-neutral-700 dark:text-white/75">
-        <p>{settings.name} memulai perjalanan sebagai fotografer dan videografer dari momen-momen kecil di sekitar — lalu berkembang ke wedding, event, produk, hingga food & beverage.</p>
-        <p>Dari situ lahir <span class="text-white">“LightJourney”</span> — nama yang terinspirasi dari ide bahwa setiap karya adalah perjalanan cahaya: menangkap momen dan mengubahnya jadi cerita.</p>
-        <p>Lewat LightJourney, tujuannya sederhana: membuat karya yang bermakna dan membantu mewujudkan visi kamu.</p>
+        <h3 class="text-4xl font-bold leading-none tracking-tight sm:text-5xl">Perjalanan di balik <em class="text-accent">lensa.</em></h3>
+        <div class="mt-8 space-y-5 leading-relaxed text-neutral-700 dark:text-white/75">
+          <p>{settings.name} memulai perjalanan sebagai fotografer dan videografer dari momen-momen kecil di sekitar — lalu berkembang ke wedding, event, produk, hingga food & beverage.</p>
+          <p>Dari situ lahir <span class="text-white">“LightJourney”</span> — nama yang terinspirasi dari ide bahwa setiap karya adalah perjalanan cahaya: menangkap momen dan mengubahnya jadi cerita.</p>
+          <p>Lewat LightJourney, tujuannya sederhana: membuat karya yang bermakna dan membantu mewujudkan visi kamu.</p>
+        </div>
       </div>
     </div>
 
