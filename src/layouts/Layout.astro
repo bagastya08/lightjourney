@@ -12,6 +12,7 @@ interface Props {
 const { forceDark = false, title = 'LightJourney — Photographer & Videographer', description = 'Freelance photographer & videographer. Portrait, wedding, event, and product photography plus videography.' } = Astro.props;
 const settings = await getSettings();
 const waLink = whatsappLink(settings.whatsapp, settings.whatsappMessage);
+const igHandle = (settings.instagram || '').match(/instagram\.com\/([^/?#]+)/)?.[1];
 ---
 
 <!doctype html>
@@ -60,13 +61,35 @@ const waLink = whatsappLink(settings.whatsapp, settings.whatsappMessage);
       <slot />
     </main>
 
-    <footer class="border-t border-black/5 px-4 py-10 text-center text-sm text-neutral-500 dark:border-white/10 dark:text-neutral-400">
-      <div class="mb-4 flex justify-center gap-4">
-        <a href={waLink} target="_blank" rel="noopener" class="hover:text-neutral-900 dark:hover:text-white">WhatsApp</a>
-        {settings.instagram && <a href={settings.instagram} target="_blank" rel="noopener" class="hover:text-neutral-900 dark:hover:text-white">Instagram</a>}
-        {settings.linkedin && <a href={settings.linkedin} target="_blank" rel="noopener" class="hover:text-neutral-900 dark:hover:text-white">LinkedIn</a>}
+    <!-- Footer: navigate / connect / contact, studio style -->
+    <footer class="border-t border-black/10 px-4 pb-10 pt-14 text-sm dark:border-white/10">
+      <div class="mx-auto grid max-w-5xl grid-cols-2 gap-10 sm:grid-cols-3">
+        <div>
+          <p class="text-xs font-medium uppercase tracking-[0.2em] text-neutral-500">[ Navigate ]</p>
+          <ul class="mt-4 space-y-2">
+            <li><a href="/" class="hover:text-accent">Home</a></li>
+            <li><a href="/works" class="hover:text-accent">Works</a></li>
+            <li><a href="/booking" class="hover:text-accent">Booking</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="text-xs font-medium uppercase tracking-[0.2em] text-neutral-500">[ Connect ]</p>
+          <ul class="mt-4 space-y-2">
+            {settings.instagram && <li><a href={settings.instagram} target="_blank" rel="noopener" class="hover:text-accent">Instagram{igHandle && <span class="text-neutral-500"> · @{igHandle}</span>}</a></li>}
+            <li><a href={waLink} target="_blank" rel="noopener" class="hover:text-accent">WhatsApp</a></li>
+            {settings.linkedin && <li><a href={settings.linkedin} target="_blank" rel="noopener" class="hover:text-accent">LinkedIn</a></li>}
+          </ul>
+        </div>
+        <div class="col-span-2 sm:col-span-1">
+          <p class="text-xs font-medium uppercase tracking-[0.2em] text-neutral-500">[ Contact ]</p>
+          <ul class="mt-4 space-y-2">
+            <li><a href={waLink} target="_blank" rel="noopener" class="hover:text-accent">+{settings.whatsapp}</a></li>
+            {settings.email && <li><a href={`mailto:${settings.email}`} class="break-all hover:text-accent">{settings.email}</a></li>}
+            <li class="text-neutral-500">Bali, Indonesia</li>
+          </ul>
+        </div>
       </div>
-      <p>© {new Date().getFullYear()} LightJourney. All rights reserved.</p>
+      <p class="mx-auto mt-12 max-w-5xl border-t border-black/10 pt-6 text-xs text-neutral-500 dark:border-white/10">© {new Date().getFullYear()} LightJourney. All rights reserved.</p>
     </footer>
 
     <script is:inline>
