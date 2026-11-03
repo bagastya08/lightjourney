@@ -24,9 +24,9 @@ const tab = (p: any) => (p.category === 'Video' ? 'video' : p.groupId);
   </div>
 
   <!-- One row; scrolls sideways on phones instead of wrapping -->
-  <div class="-mx-4 mt-10 flex gap-6 overflow-x-auto whitespace-nowrap border-b border-black/10 px-4 text-xs font-semibold uppercase tracking-[0.2em] [scrollbar-width:none] dark:border-white/10">
-    <button data-tab="" class="tab-btn -mb-px border-b-2 border-transparent pb-3 text-neutral-500 hover:text-accent aria-pressed:border-accent aria-pressed:text-neutral-900 dark:aria-pressed:text-white" aria-pressed="true">All</button>
-    {tabs.map((t) => <button data-tab={t.key} class="tab-btn -mb-px border-b-2 border-transparent pb-3 text-neutral-500 hover:text-accent aria-pressed:border-accent aria-pressed:text-neutral-900 dark:aria-pressed:text-white" aria-pressed="false">{t.label}</button>)}
+  <div class="-mx-4 mt-10 flex gap-3 overflow-x-auto whitespace-nowrap px-4 [scrollbar-width:none]">
+    <button data-tab="" class="tab-btn min-w-[8.5rem] flex-1 border border-black/15 bg-white py-3 text-sm uppercase tracking-wide text-black transition-colors hover:bg-neutral-200 aria-pressed:border-neutral-800 aria-pressed:bg-black aria-pressed:text-white" aria-pressed="true">All</button>
+    {tabs.map((t) => <button data-tab={t.key} class="tab-btn min-w-[8.5rem] flex-1 border border-black/15 bg-white py-3 text-sm uppercase tracking-wide text-black transition-colors hover:bg-neutral-200 aria-pressed:border-neutral-800 aria-pressed:bg-black aria-pressed:text-white" aria-pressed="false">{t.label}</button>)}
   </div>
 
   {projects.length > 0 ? (
