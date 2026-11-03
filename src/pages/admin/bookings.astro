@@ -83,7 +83,7 @@ const STATUSES = ['new', 'confirmed', 'done', 'cancelled'];
             </p>
             {b.notes && <p class="mt-2 text-sm">{b.notes}</p>}
           </div>
-          <div class="flex items-center gap-2">
+          <div class="flex flex-wrap items-center gap-2">
             <a href={`/admin/bookings/${b.id}`} class="border border-black/10 px-4 py-1.5 text-sm font-medium hover:bg-black/5 dark:border-white/15 dark:hover:bg-white/10">
               Kelola foto →
             </a>

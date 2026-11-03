@@ -39,10 +39,10 @@ const waLink = whatsappLink(settings.whatsapp, settings.whatsappMessage);
           <!-- logo.svg is white; invert it on the light theme -->
           <img src="/logo.svg" alt={settings.name} class="h-8 w-auto invert dark:invert-0" />
         </a>
-        <div class="hidden items-center gap-1 sm:flex">
-          <a href="/" class="px-4 py-2 text-sm font-medium hover:text-accent">Home</a>
-          <a href="/works" class="px-4 py-2 text-sm font-medium hover:text-accent">Works</a>
-          <a href="/booking" class="px-4 py-2 text-sm font-medium hover:text-accent">Booking</a>
+        <div class="flex items-center sm:gap-1">
+          <a href="/" class="px-2 py-2 text-xs font-medium hover:text-accent sm:px-4 sm:text-sm">Home</a>
+          <a href="/works" class="px-2 py-2 text-xs font-medium hover:text-accent sm:px-4 sm:text-sm">Works</a>
+          <a href="/booking" class="px-2 py-2 text-xs font-medium hover:text-accent sm:px-4 sm:text-sm">Booking</a>
         </div>
         <div class="flex items-center gap-2">
           <a href={waLink} target="_blank" rel="noopener" class="hidden bg-neutral-900 px-4 py-2 text-sm font-semibold text-white hover:opacity-90 dark:bg-white dark:text-black sm:inline-block">

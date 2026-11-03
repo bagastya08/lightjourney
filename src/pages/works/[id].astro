@@ -30,9 +30,9 @@ const isVideo = project.category === 'Video';
   {isVideo ? (
     <div class="mt-10 aspect-video bg-black">
       {project.videoFileUrl ? (
-        <video src={project.videoFileUrl} controls playsinline preload="metadata" class="h-full w-full"></video>
+        <video src={project.videoFileUrl} autoplay muted loop controls playsinline preload="auto" class="h-full w-full"></video>
       ) : (
-        <iframe src={embedUrl(project.videoUrl)} title={project.title} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen class="h-full w-full"></iframe>
+        <iframe src={`${embedUrl(project.videoUrl)}${embedUrl(project.videoUrl).includes('?') ? '&' : '?'}autoplay=1&mute=1`} title={project.title} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen class="h-full w-full"></iframe>
       )}
     </div>
   ) : (

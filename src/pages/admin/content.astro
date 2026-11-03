@@ -47,9 +47,9 @@ try {
 
   <h2 class="mt-6 text-lg font-semibold">Kategori (Project Group)</h2>
   <form id="group-form" class="mt-2 flex flex-wrap items-end gap-3 border border-black/10 p-4 dark:border-white/10">
-    <div>
+    <div class="w-full sm:w-auto">
       <label class="mb-1 block text-sm font-medium">Nama kategori baru</label>
-      <input required name="title" placeholder="misal: Wedding Photography" class="w-64 border border-black/10 bg-transparent px-3 py-2.5 outline-none dark:border-white/15" />
+      <input required name="title" placeholder="misal: Wedding Photography" class="w-full border sm:w-64 border-black/10 bg-transparent px-3 py-2.5 outline-none dark:border-white/15" />
     </div>
     <button type="submit" class="bg-neutral-900 px-5 py-2.5 text-sm font-semibold text-white dark:bg-white dark:text-black">Tambah Kategori</button>
   </form>
@@ -136,8 +136,8 @@ try {
 
         <details class="mt-3">
           <summary class="cursor-pointer text-sm text-neutral-500">+ Tambah foto ke project ini</summary>
-          <form class="add-images-form mt-2 flex items-center gap-2" data-id={p._id}>
-            <input type="file" name="images" accept="image/*" multiple class="text-sm" />
+          <form class="add-images-form mt-2 flex flex-wrap items-center gap-2" data-id={p._id}>
+            <input type="file" name="images" accept="image/*" multiple class="min-w-0 max-w-full text-sm" />
             <button type="submit" class="border border-black/10 px-3 py-1.5 text-xs font-semibold dark:border-white/15">Upload</button>
           </form>
         </details>
@@ -146,16 +146,16 @@ try {
           <details class="mt-2">
             <summary class="cursor-pointer text-sm text-neutral-500">+ Pasang video</summary>
             <form class="add-video-form mt-2 flex flex-wrap items-center gap-2" data-id={p._id}>
-              <input name="videoUrl" placeholder="atau tempel URL YouTube/Vimeo" class="border border-black/10 bg-transparent px-3 py-1.5 text-sm outline-none dark:border-white/15" />
+              <input name="videoUrl" placeholder="atau tempel URL YouTube/Vimeo" class="w-full border sm:w-auto border-black/10 bg-transparent px-3 py-1.5 text-sm outline-none dark:border-white/15" />
               {unattachedVideos.length > 0 && (
-                <select name="existingAssetId" class="border border-black/10 bg-transparent px-3 py-1.5 text-sm outline-none dark:border-white/15">
+                <select name="existingAssetId" class="w-full max-w-full border sm:w-auto border-black/10 bg-transparent px-3 py-1.5 text-sm outline-none dark:border-white/15">
                   <option value="">— pilih file video yang sudah keupload —</option>
                   {unattachedVideos.map((v: any) => (
                     <option value={v._id}>{v.originalFilename} ({Math.round(v.size / 1024 / 1024)}MB)</option>
                   ))}
                 </select>
               )}
-              <input type="file" name="videoFile" accept="video/*" class="text-sm" />
+              <input type="file" name="videoFile" accept="video/*" class="min-w-0 max-w-full text-sm" />
               <button type="submit" class="border border-black/10 px-3 py-1.5 text-xs font-semibold dark:border-white/15">Pasang</button>
             </form>
           </details>

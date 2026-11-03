@@ -24,9 +24,9 @@ const tab = (p: any) => (p.category === 'Video' ? 'video' : p.groupId);
   </div>
 
   <!-- One row; scrolls sideways on phones instead of wrapping -->
-  <div class="-mx-4 mt-10 flex gap-3 overflow-x-auto whitespace-nowrap px-4 [scrollbar-width:none]">
-    <button data-tab="" class="tab-btn min-w-[8.5rem] flex-1 border border-black/15 bg-white py-3 text-sm uppercase tracking-wide text-black transition-colors hover:bg-neutral-200 aria-pressed:border-neutral-800 aria-pressed:bg-black aria-pressed:text-white" aria-pressed="true">All</button>
-    {tabs.map((t) => <button data-tab={t.key} class="tab-btn min-w-[8.5rem] flex-1 border border-black/15 bg-white py-3 text-sm uppercase tracking-wide text-black transition-colors hover:bg-neutral-200 aria-pressed:border-neutral-800 aria-pressed:bg-black aria-pressed:text-white" aria-pressed="false">{t.label}</button>)}
+  <div class="-mx-4 mt-10 flex gap-3 overflow-x-auto whitespace-nowrap px-4 [scrollbar-width:none] sm:grid sm:auto-cols-[minmax(max-content,1fr)] sm:grid-flow-col">
+    <button data-tab="" class="tab-btn flex-none border px-6 border-black/15 bg-white py-3 text-sm uppercase tracking-wide text-black transition-colors hover:bg-neutral-200 aria-pressed:border-neutral-800 aria-pressed:bg-black aria-pressed:text-white" aria-pressed="true">All</button>
+    {tabs.map((t) => <button data-tab={t.key} class="tab-btn flex-none border px-6 border-black/15 bg-white py-3 text-sm uppercase tracking-wide text-black transition-colors hover:bg-neutral-200 aria-pressed:border-neutral-800 aria-pressed:bg-black aria-pressed:text-white" aria-pressed="false">{t.label}</button>)}
   </div>
 
   {projects.length > 0 ? (
@@ -39,12 +39,12 @@ const tab = (p: any) => (p.category === 'Video' ? 'video' : p.groupId);
               {cover ? (
                 <img src={cover} alt={p.title} loading={i < 2 ? 'eager' : 'lazy'} class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
               ) : p.videoFileUrl ? (
-                <video src={`${p.videoFileUrl}#t=0.5`} muted playsinline preload="metadata" class="h-full w-full object-cover"></video>
+                <video src={/dynast/i.test(p.title) ? "/hero.mp4" : p.videoFileUrl} autoplay muted loop playsinline preload="metadata" class="h-full w-full object-cover"></video>
               ) : null}
               {p.category === 'Video' && <span class="absolute left-4 top-4 bg-accent px-2 py-1 text-[10px] font-semibold uppercase tracking-widest text-white">Video</span>}
             </div>
             <div class="mt-4 flex items-baseline justify-between gap-4">
-              <h2 class="text-xl font-bold tracking-tight">{p.title}</h2>
+              <h2 class="min-w-0 text-xl font-bold tracking-tight">{p.title}</h2>
               <span class="shrink-0 text-xs font-semibold uppercase tracking-[0.2em] text-neutral-500 transition-colors group-hover:text-accent">View project →</span>
             </div>
             <p class="mt-1 text-sm text-neutral-500">{p.category === 'Video' ? 'Video' : p.groupTitle}{p.client && ` · ${p.client}`}</p>
