@@ -76,3 +76,6 @@ update bookings set quota = 5 where quota is null;
 alter table bookings add column if not exists source text;
 update bookings set source = 'admin' where source is null;
 alter table bookings alter column source set default 'web';
+
+-- Optional link to the raw (unedited) files, shown to the client only when filled.
+alter table bookings add column if not exists raw_url text;

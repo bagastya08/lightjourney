@@ -40,6 +40,13 @@ export const PATCH: APIRoute = async ({ params, request }) => {
       update.quota = quota;
     }
     if (typeof body.title === 'string') update.title = body.title.trim() || null;
+    if (typeof body.raw_url === 'string') {
+      const raw = body.raw_url.trim();
+      if (raw && !/^https?:\/\//i.test(raw)) {
+        return new Response(JSON.stringify({ error: 'Link mentahan harus diawali https://' }), { status: 400 });
+      }
+      update.raw_url = raw || null; // empty = hide the button
+    }
     if (body.preferred_date !== undefined) {
       if (!isIsoDate(body.preferred_date)) {
         return new Response(JSON.stringify({ error: 'Tanggal tidak valid.' }), { status: 400 });
