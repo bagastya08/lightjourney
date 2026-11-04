@@ -2,6 +2,7 @@
 export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
 import { sanityFresh } from '../../lib/sanity';
+import { DEFAULT_SETTINGS } from '../../lib/content';
 
 let settings: any = null;
 let sanityError = '';
@@ -29,8 +30,18 @@ try {
       <input name="name" value={settings?.name || ''} class="w-full border border-black/10 bg-transparent px-3 py-2 outline-none dark:border-white/15" />
     </div>
     <div>
-      <label class="mb-1 block text-sm font-medium">Avatar</label>
+      <label class="mb-1 block text-sm font-medium">Foto profil (About)</label>
       <input type="file" name="avatar" accept="image/*" class="w-full text-sm" />
+      <p class="mt-1 text-xs text-neutral-500">Kosongkan jika tidak ganti. Dipotong otomatis 4:5 (1080×1350).</p>
+    </div>
+    <div class="sm:col-span-2">
+      <label class="mb-1 block text-sm font-medium">Jabatan / keterangan di bawah nama</label>
+      <input name="role" value={settings?.role || 'Founder · Photographer & Videographer'} class="w-full border border-black/10 bg-transparent px-3 py-2 outline-none dark:border-white/15" />
+    </div>
+    <div class="sm:col-span-2">
+      <label class="mb-1 block text-sm font-medium">Cerita About (LightJourney)</label>
+      <textarea name="about" rows="8" class="w-full border border-black/10 bg-transparent px-3 py-2 leading-relaxed outline-none dark:border-white/15">{settings?.about || DEFAULT_SETTINGS.about}</textarea>
+      <p class="mt-1 text-xs text-neutral-500">Pisahkan paragraf dengan satu baris kosong.</p>
     </div>
     <div class="sm:col-span-2">
       <label class="mb-1 block text-sm font-medium">Tagline (headline hero)</label>

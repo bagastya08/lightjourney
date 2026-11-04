@@ -99,19 +99,17 @@ const label = 'text-xs font-medium uppercase tracking-[0.2em] text-neutral-500';
     <div class="mt-16 grid items-start gap-10 sm:grid-cols-[1fr_1.4fr]">
       <figure>
         <div class="aspect-[4/5] overflow-hidden bg-neutral-900">
-          <img src="/bagastya.jpg" alt={settings.name} width="1080" height="1350" loading="lazy" class="h-full w-full object-cover" />
+          <img src={settings.aboutPhoto} alt={settings.name} width="1080" height="1350" loading="lazy" class="h-full w-full object-cover" />
         </div>
         <figcaption class="mt-4">
           <p class="text-2xl font-bold leading-tight tracking-tight">{settings.name}</p>
-          <p class="text-sm text-neutral-400">Founder · Photographer & Videographer</p>
+          <p class="text-sm text-neutral-400">{settings.role}</p>
         </figcaption>
       </figure>
       <div>
         <h3 class="text-4xl font-bold leading-none tracking-tight sm:text-5xl">Perjalanan di balik <em class="text-accent">lensa.</em></h3>
         <div class="mt-8 space-y-5 leading-relaxed text-neutral-700 dark:text-white/75">
-          <p>{settings.name} memulai perjalanan sebagai fotografer dan videografer dari momen-momen kecil di sekitar — lalu berkembang ke wedding, event, produk, hingga food & beverage.</p>
-          <p>Dari situ lahir <span class="text-white">“LightJourney”</span> — nama yang terinspirasi dari ide bahwa setiap karya adalah perjalanan cahaya: menangkap momen dan mengubahnya jadi cerita.</p>
-          <p>Lewat LightJourney, tujuannya sederhana: membuat karya yang bermakna dan membantu mewujudkan visi kamu.</p>
+          {settings.about.split(/\n\s*\n/).filter((t: string) => t.trim()).map((t: string) => <p class="whitespace-pre-line">{t.trim()}</p>)}
         </div>
       </div>
     </div>

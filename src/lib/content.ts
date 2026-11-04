@@ -6,6 +6,14 @@ export const DEFAULT_SETTINGS = {
   tags: ['Freelance Photographer & Videographer', 'Available for booking'],
   tools: ['Lightroom', 'Premiere Pro', 'DaVinci Resolve', 'Illustrator'],
   avatar: null as string | null,
+  aboutPhoto: '/bagastya.jpg',
+  role: 'Founder · Photographer & Videographer',
+  // Paragraphs separated by a blank line.
+  about: `Bagastya memulai perjalanan sebagai fotografer dan videografer dari momen-momen kecil di sekitar — lalu berkembang ke wedding, event, produk, hingga food & beverage.
+
+Dari situ lahir “LightJourney” — nama yang terinspirasi dari ide bahwa setiap karya adalah perjalanan cahaya: menangkap momen dan mengubahnya jadi cerita.
+
+Lewat LightJourney, tujuannya sederhana: membuat karya yang bermakna dan membantu mewujudkan visi kamu.`,
   whatsapp: '62895412230426',
   whatsappMessage: 'Halo Bagastya, saya tertarik untuk booking sesi foto/video.',
   instagram: 'https://www.instagram.com/journey.creativ4/',
@@ -21,6 +29,9 @@ export async function getSettings() {
       ...DEFAULT_SETTINGS,
       ...doc,
       avatar: doc.avatar ? urlFor(doc.avatar).width(200).height(200).fit('crop').url() : null,
+      aboutPhoto: doc.avatar ? urlFor(doc.avatar).width(1080).height(1350).fit('crop').auto('format').url() : DEFAULT_SETTINGS.aboutPhoto,
+      role: doc.role || DEFAULT_SETTINGS.role,
+      about: doc.about || DEFAULT_SETTINGS.about,
       tags: doc.tags?.length ? doc.tags : DEFAULT_SETTINGS.tags,
       tools: doc.tools?.length ? doc.tools : DEFAULT_SETTINGS.tools
     };

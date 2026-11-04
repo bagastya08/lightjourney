@@ -11,7 +11,7 @@ export const POST: APIRoute = async ({ request }) => {
     await client.createIfNotExists({ _id: 'siteSettings', _type: 'settings' });
 
     const fields: Record<string, unknown> = {};
-    for (const key of ['name', 'tagline', 'whatsapp', 'whatsappMessage', 'instagram', 'linkedin', 'email']) {
+    for (const key of ['name', 'role', 'about', 'tagline', 'whatsapp', 'whatsappMessage', 'instagram', 'linkedin', 'email']) {
       const value = form.get(key);
       if (value !== null && value !== '') fields[key] = value;
     }
