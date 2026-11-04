@@ -4,7 +4,8 @@ import { getCategories, getProjects } from '../../lib/content';
 
 const categoryParam = Astro.url.searchParams.get('category');
 const groups = await getCategories();
-const projects = (await getProjects()).filter((p: any) => p.category === 'Foto');
+// Any project with photos counts, including ones that also carry a video.
+const projects = (await getProjects()).filter((p: any) => p.imageUrls?.length);
 const categories = groups.filter((g: any) => projects.some((p: any) => p.groupId === g._id));
 const activeCategory = categories.find((c: any) => c._id === categoryParam) || categories[0];
 
